@@ -15,6 +15,7 @@ public class UserController {
 
     @GetMapping("/home")
     public String home() {
+        System.out.println("测试上传");
         return "Auth/HomePage";
     }
 }
