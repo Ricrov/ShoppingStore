@@ -1,6 +1,6 @@
 spring:
   application:
-    name: user-module
+    name: backstage-module
   cloud:
     config:
       uri: http://localhost:8760
