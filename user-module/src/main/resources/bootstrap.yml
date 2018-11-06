@@ -1,9 +1,0 @@
-spring:
-  application:
-    name: user-module
-  cloud:
-    config:
-      uri: http://localhost:8760
-      fail-fast: true
-  profiles:
-    active: dev
