@@ -7,3 +7,11 @@ spring:
       fail-fast: true
   profiles:
     active: dev
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/shoppingstore?serverTimezone=UTC
+    username: root
+    password: root
+  jpa:
+    # 打印jpa生成的sql语句
+    show-sql: true
