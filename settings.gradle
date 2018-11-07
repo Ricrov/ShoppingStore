@@ -15,4 +15,5 @@ include ':config-module',
         ':cart-module',
         ':backstage-module',
         ':login-module',
-        ':search-module'
+        ':search-module',
+        ':webpage-module'

@@ -1,6 +1,6 @@
-server:
-  port: 8780
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8765/eureka
+#server:
+#  port: 8780
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://localhost:8765/eureka

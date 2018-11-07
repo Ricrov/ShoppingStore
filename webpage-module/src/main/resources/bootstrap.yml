@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: webpage-module
+  mvc:
+    view:
+      prefix: /resources/templates/backstage/
+      suffix: .jsp
+  cloud:
+    config:
+      uri: http://localhost:8760
+      fail-fast: true
+  profiles:
+    active: dev
