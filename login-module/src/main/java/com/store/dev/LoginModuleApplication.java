@@ -1,4 +1,4 @@
-package com.store.dev.login;
+package com.store.dev;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
