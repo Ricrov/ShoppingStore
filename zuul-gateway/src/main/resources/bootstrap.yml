@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: zuul-gateway
+  cloud:
+    config:
+      uri: http://localhost:8760
+      fail-fast: true
+  profiles:
+    active: dev
+
+zuul:
+  routes:
+    order-module:
+      path: /order-module/**
+      url: http://localhost:8775/
+    backstage-module:
+      path: /backstage-module/**
+      url: http://localhost:8800/
+    login-module:
+      path: /login-module/**
+      url: http://localhost:8790/
