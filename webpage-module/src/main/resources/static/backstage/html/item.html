@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>${item.title } - shop</title>
+    <script src="../js/jquery/jquery-3.2.1.js"></script>
+    <script>var jdpts = new Object();
+    jdpts._st = new Date().getTime();</script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="../../frontstage/css/taotao.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="../../frontstage/css/pshow.css" media="all"/>
+    <script type="text/javascript">
+        window.pageConfig = {
+            compatible: true,
+            product: {
+                skuid: 1221882,
+                name: '\u957f\u8679\uff08\u0043\u0048\u0041\u004e\u0047\u0048\u004f\u004e\u0047\uff09\u004c\u0045\u0044\u0034\u0032\u0035\u0033\u0038\u0045\u0053\u0020\u0034\u0032\u82f1\u5bf8\u0020\u7a84\u8fb9\u84dd\u5149\u004c\u0045\u0044\u6db2\u6676\u7535\u89c6\uff08\u9ed1\u8272\uff09',
+                skuidkey: 'E804B1D153D29E36088A33A134D85EEA',
+                href: 'http://item.jd.com/1221882.html',
+                src: 'jfs/t304/157/750353441/93159/e4ee9876/54227256N20d4f5ec.jpg',
+                cat: [737, 794, 798],
+                brand: 20710,
+                nBrand: 20710,
+                tips: false,
+                type: 1,
+                venderId: 0,
+                shopId: '0',
+                TJ: '0',
+                specialAttrs: ["HYKHSP-0", "isHaveYB", "isSelfService-0", "isWeChatStock-0", "isCanUseJQ", "isOverseaPurchase-0", "YuShou", "is7ToReturn-1", "isCanVAT"],
+                videoPath: '',
+                HM: '0'
+            }
+        };
+    </script>
+</head>
+<body version="140120">
+<script type="text/javascript">
+    try {
+        (function (flag) {
+            if (!flag) {
+                return;
+            }
+            if (window.location.hash == '#m') {
+                var exp = new Date();
+                exp.setTime(exp.getTime() + 30 * 24 * 60 * 60 * 1000);
+                document.cookie = "pcm=1;expires=" + exp.toGMTString() + ";path=/;domain=jd.com";
+                return;
+            } else {
+                var cook = document.cookie.match(new RegExp("(^| )pcm=([^;]*)(;|$)"));
+                var flag = false;
+                if (cook && cook.length > 2 && unescape(cook[2]) == "1") {
+                    flag = true;
+                }
+            }
+            var userAgent = navigator.userAgent;
+            if (userAgent) {
+                userAgent = userAgent.toUpperCase();
+                if (userAgent.indexOf("PAD") > -1) {
+                    return;
+                }
+                var mobilePhoneList = ["IOS", "IPHONE", "ANDROID", "WINDOWS PHONE"];
+                for (var i = 0, len = mobilePhoneList.length; i < len; i++) {
+                    if (userAgent.indexOf(mobilePhoneList[i]) > -1) {
+                        var url = "http://m.jd.com/product/" + pageConfig.product.skuid + ".html";
+                        if (flag) {
+                            pageConfig.product.showtouchurl = true;
+                        } else {
+                            window.location.href = url;
+                        }
+                        break;
+                    }
+                }
+            }
+        })((function () {
+            var json = {"6881": 3, "1195": 3, "10011": 3, "6980": 3, "12360": 3};
+            if (json[pageConfig.product.cat[0] + ""] == 1 || json[pageConfig.product.cat[1] + ""] == 2 || json[pageConfig.product.cat[2] + ""] == 3) {
+                return false;
+            } else {
+                return true;
+            }
+        })());
+    } catch (e) {
+    }</script>
+<!-- header start -->
+<jsp:include page="../../../templates/frontstage/commons/header.jsp"/>
+<!-- header end -->
+<div id="w1" class="w">
+    <div class="breadcrumb">
+        <strong><a href="http://channel.jd.com/electronic.html">家用电器</a></strong><span>&nbsp;&gt;&nbsp;<a
+            href="http://channel.jd.com/737-794.html">大 家 电</a>&nbsp;&gt;&nbsp;<a
+            href="http://list.jd.com/737-794-798.html">平板电视</a>&nbsp;&gt;&nbsp;</span>
+        <script type="text/javascript">pageConfig.product.cat = [737, 794, 798];</script>
+        <span><a href="http://www.jd.com/pinpai/798-20710.html">长虹（CHANGHONG）</a>&nbsp;&gt;&nbsp;<a
+                href="http://item.jd.com/1221882.html">长虹LED42538ES</a></span>
+    </div>
+</div><!--breadcrumb end-->
+<div class="w">
+
+    <script>
+
+        $(function () {
+
+            var urlParm = decodeURI(window.location.href.split("?")[1]);
+            itemId = urlParm.split("itemId=")[1];
+            console.log(itemId);
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:8795/cart/goodsMessage",
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    "itemId": itemId
+                }),
+                success: requestFinished
+            });
+
+            function requestFinished(resp) {
+                console.log(resp);
+                var product_intro = $('<div id="product-intro"></div>');
+                var div1 = $('<div id="name"></div>');
+                var h1 = $('<h1></h1>').text(resp.title);
+                var strong = $('<strong></strong>');
+                div1.append(h1).append(strong);
+
+
+                var div_clearfix = $('<div class="clearfix"></div>');
+                var ul = $('<ul id="summary"></ul>');
+                var li1 = $('<li id="summary-price"></li>');
+                var div2 = $('<div class="dt">淘&nbsp;淘&nbsp;价：</div>');
+                var div3 = $('<div class="dd"></div>');
+                var strong_p_price = $('<strong class="p-price" id="jd-price">￥</strong>');
+                var a_notice_downp = $('<a id="notice-downp" href="#none" target="_blank">(降价通知)</a>');
+                div3.append(strong_p_price).append(a_notice_downp);
+                li1.append(div2).append(div3);
+
+
+                var li2 = $('<li id="summary-market"></li>');
+                var div4 = $('<div class="dt">商品编号：</div>');
+                var span = $('<span>${item.id }</span>').text(resp.itemId);
+                var div5 = $('<div class="dd"></div>');
+                div5.append(span);
+                li2.append(div4).append(div5);
+
+
+                var li3 = $('<li id="summary-grade"></li>');
+                var div6 = $('<div class="dt">商品评分：</div>');
+                var div7 = $('<div class="dd"></div>');
+                var span2 = $('<span class="star  sa0"></span>');
+                var a = $('<a href="#comment"></a>');
+                div7.append(span2).append(a);
+                li3.append(div6).append(div7);
+
+
+                var li4 = $('<li id="summary-stock" style="display: none;"></li>');
+                var div8 = $('<div class="dt">配&nbsp;送&nbsp;至：</div>');
+                var div9 = $('<div class="dd"></div>');
+                var div10 = $('<div id="store-selector" class=""></div>');
+                var div11 = $('<div class="text"></div>');
+                var div12 = $('<div></div>');
+                var b = $(' <b></b>');
+                var div13 = $('<div class="content"></div>');
+                var span3 = $('<span class="clr"></span>');
+                var div14 = $('<div class="close" onclick="$(\'#store-selector\').removeClass(\'hover\')"></div>');
+                var div15 = $('<div id="store-prompt"></div>');
+                div11.append(div12).append(b);
+                div13.append(span3);
+                div10.append(div11).append(div13).append(div14);
+                div9.append(div10).append(div15);
+                var span4 = $('<span class="clr"></span>');
+                li4.append(div8).append(div9).append(span4);
+
+
+                var li5 = $('<li id="summary-service" class="hide"></li>');
+                var div16 = $('<div class="dt">服&#x3000;&#x3000;务：</div>');
+                var div17 = $('<div class="dd">由 shop 发货并提供售后服务。</div>');
+                li5.append(div16).append(div17);
+
+
+                var li6 = $('<li id="summary-tips" class="hide"></li>');
+                var div19 = $('<div class="dt">温馨提示：</div>');
+                var div20 = $('<div class="dd"></div>');
+                li6.append(div19).append(div20);
+
+
+                var li7 = $(' <li id="summary-gifts" class="hide"></li>');
+                var div21 = $('<div class="dt">赠&#x3000;&#x3000;品：</div>');
+                var div22 = $('<div class="dd"></div>');
+                li7.append(div21).append(div22);
+
+                var li8 = $('<li id="summary-promotion-extra" class="none"></li>');
+                var div23 = $('<div class="dt">促销信息：</div>');
+                var div24 = $('<div class="dd"></div>');
+                li8.append(div23).append(div24);
+
+
+                ul.append(li1).append(li2).append(li3).append(li4)
+                    .append(li5).append(li6).append(li7).append(li8);
+
+
+                var div_brand_bar = $(' <div id="brand-bar"></div>');
+                var dl = $('<dl class="slogens"></dl>');
+                var dd = $('<dd class="fore1"></dd>');
+                var a2 = $('<a target="_blank" href="http://help.360buy.com/help/question-67.html"><b></b><span>货到</span><span>付款</span></a>');
+                dd.append(a2);
+                var dd2 = $('<dd class="fore2"></dd>');
+                var dd3 = $('<dd class="fore3"></dd>');
+                var a3 = $('<a target="_blank" href="http://help.360buy.com/help/question-65.html"><b></b><span>满39</span><span>免运费</span></a>');
+                dd3.append(a3);
+                var dd4 = $('<dd class="fore4"></dd>');
+                var dd5 = $('<dd class="fore5"></dd>');
+                var a4 = $('<a target="_blank" href="http://help.360buy.com/help/question-97.html"><b></b><span>售后</span><span>上门</span></a>');
+                dd5.append(a4);
+                dl.append(dd).append(dd2).append(dd3).append(dd4).append(dd5);
+
+
+                var div25 = $('<div class="seller hide"></div>');
+                var p = $('<p class="seller-link"></p>');
+                var p2 = $('<p id="evaluate"></p>');
+                var em = $('<em class="dt">服务评价：</em>');
+                var span5 = $('<span class="heart-white"><span class="heart-red h4">&nbsp;</span></span>');
+                var em2 = $('<em class="evaluate-grade"></em>');
+                p2.append(em).append(span5).append(em2);
+                div25.append(p).append(p2);
+
+                div_brand_bar.append(dl).append(div25);
+
+                var ul2 = $('<ul id="choose"></ul>');
+                var li9 = $('<li id=\'choose-type\'></li>');
+                var li10 = $('<li id="choose-amount"></li>');
+                var div26 = $('<div class="dt">购买数量：</div>');
+                var div27 = $('<div class="dd"></div>');
+                var div28 = $('<div class="wrap-input"></div>');
+                var a5 = $('<a class="btn-reduce" href="javascript:;" onclick="setAmount.reduce(\'#buy-num\')">减少数量</a>');
+                var a6 = $('<a class="btn-add" href="javascript:;" onclick="setAmount.add(\'#buy-num\')">增加数量</a>');
+                var input = $('<input class="text" id="buy-num" value="1" onkeyup="setAmount.modify(\'#buy-num\');"/>');
+                div28.append(a5, a6, input);
+                div27.append(div28);
+                li10.append(div26).append(div27);
+
+
+                var li11 = $('<li id="choose-result"></li>');
+                var div29 = $('<div class="dt"></div>');
+                var div30 = $('<div class="dd"></div>');
+                li11.append(div29).append(div30);
+                var li12 = $('<li id="choose-btns"></li>');
+                var div31 = $('<div id="choose-btn-append" class="btn"></div>');
+                var a7 = $('<a class="btn-append " id="InitCartUrl" href="/cart/add/${item.id}.html">加入购物车<b></b></a>');
+                div31.append(a7);
+                var div32 = $('<div id="choose-btn-easybuy" class="btn"></div>');
+                var div33 = $('<div id="choose-btn-divide" class="btn"></div>');
+                li12.append(div31).append(div32).append(div33);
+
+                var span6 = $('<span class="clr"></span>');
+
+                ul2.append(li9).append(li10).append(li11).append(li12);
+                div_clearfix.append(ul).append(ul2);
+                product_intro.append(div1).append(div_clearfix).append(span6);
+
+
+                var w1 = $('#w1');
+                var div_preview = $('<div id="preview"></div>');
+
+                var div_jqzoom = $('<div id="spec-n1" class="jqzoom" clstag="shangpin|keycount|product|spec-n1"></div>');
+                var img3 = "";
+                img3 += "<img data-img=\"1\" width=\"350\" height=\"350\" src=" + resp.image + " + \"alt=" + resp.title + " />";
+                var img4 = $(img3);
+                div_jqzoom.append(img4);
+                var div_spec_list = $('<div id="spec-list"></div>');
+                var div_short_share = $('<div id="short-share">');
+
+
+                var div34 = $('<div id="spec-list"></div>');
+                var a8 = $('<a href="javascript:;" class="spec-control" id="spec-forward"></a>');
+                var a9 = $('<a href="javascript:;" class="spec-control" id="spec-backward"></a>');
+                var div35 = $('<div class="spec-items"></div>');
+                var ul3 = $('<ul class="lh"></ul>');
+                var li13 = $('<li></li>');
+                var img5 = $('<img data-img="1" class="img-hover" alt="${item.title}" src="${pic}" width="50" height="50" data-url="${pic}">');
+                li13.append(img5);
+                var li14 = $('<li></li>');
+                var img6 = $('<img data-img="1" alt="${item.title}" src="${pic}" width="50" height="50" data-url="${pic}">');
+                li14.append(img6);
+                ul3.append(li13).append(li14);
+                div35.append(ul3);
+                div34.append(a8).append(a9).append(div35);
+
+
+                var div36 = $('<div id="view-bigimg" class="fl"><b></b><a href="http://www.jd.com/bigimage.aspx?id=1221882" target="_blank">查看大图</a></div>');
+                var div37 = $('<div id="share-list" class="share-list"></div>');
+                var div38 = $('<div class="share-bd"></div>');
+                var em6 = $('<em class="share-hd">分享到：</em>');
+                var ul4 = $('<ul class="share-list-item clearfix"></ul>');
+                var li15 = $('<li><a href="javascript:;" id="site-sina" title="分享到新浪微博">新浪微博</a></li>');
+                var li16 = $('<li><a href="javascript:;" id="site-qq" title="分享到给QQ好友">QQ</a></li>');
+                var li17 = $('<li><a href="javascript:;" id="site-qzone" title="分享到腾讯微博">腾讯微博</a></li>');
+                var li18 = $('<li><a href="javascript:;" id="site-renren" title="分享到人人网">人人网</a></li>');
+                var li19 = $('<li><a href="javascript:;" id="site-kaixing" title="分享到开心网">开心网</a></li>');
+                var li20 = $('<li><a href="javascript:;" id="site-douban" title="分享到豆瓣">豆瓣</a></li>');
+                var li21 = $('<li><a href="javascript:;" id="site-msn" title="分享给MSN好友">MSN</a></li>');
+                var li22 = $('<li><a href="javascript:;" id="site-email" title="邮件分享给好友">邮件</a></li>');
+                ul4.append(li15).append(li16).append(li17)
+                    .append(li18).append(li19).append(li20).append(li21).append(li22);
+                div38.append(em6).append(ul4);
+                var div39 = $('<div class="share-ft"><b></b></div>');
+                div37.append(div38).append(div39);
+                var div40 = $('<div class="clb"></div>');
+
+                div_short_share.append(div36).append(div37).append(div40);
+
+
+                div_preview.append(div_jqzoom).append(div_spec_list).append(div_short_share);
+                w1.append(product_intro).append(div_preview);
+
+            }
+
+        })
+
+    </script>
+
+</div><!--product-intro end-->
+
+
+<div id="w2" class="w">
+    <div class="right">
+        <div id="product-detail" class="m m1" data-widget="tabs" clstag="shangpin|keycount|product|detail">
+            <div class="mt">
+                <ul class="tab">
+                    <li clstag="shangpin|keycount|product|pinfotab" data-widget="tab-item" class="curr"><a
+                            href="javascript:;">商品介绍</a></li>
+                    <li clstag="shangpin|keycount|product|pcanshutab" data-widget="tab-item"><a
+                            href="javascript:;">规格参数</a></li>
+                    <li clstag="shangpin|keycount|product|packlisttab" data-widget="tab-item"><a href="javascript:;">包装清单</a>
+                    </li>
+                    <li clstag="shangpin|keycount|product|pingjiatab" data-widget="tab-item"><a
+                            href="javascript:;">商品评价</a></li>
+                    <li clstag="shangpin|keycount|product|psaleservice" data-widget="tab-item"><a href="javascript:;">售后保障</a>
+                    </li>
+                    <li clstag="shangpin|keycount|product|zhinan" data-widget='tab-item'><a href='javascript:;'>京博士</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="mc" data-widget="tab-content" id="product-detail-1">
+                <ul class="detail-list">
+                    <li title="长虹LED42538ES">商品名称：长虹LED42538ES</li>
+                    <li>商品编号：1221882</li>
+                    <li>品牌：<a href="http://www.jd.com/pinpai/798-20710.html" target="_blank">长虹（CHANGHONG）</a></li>
+                    <li>上架时间：2014-09-24 15:45:26</li>
+                    <li>商品毛重：13.5kg</li>
+                    <li>商品产地：中国大陆</li>
+                    <li>分辨率：全高清（1920*1080）</li>
+                    <li>居室场景：卧室电视 ，客厅电视</li>
+                    <li>品类：LED电视（主流）</li>
+                    <li>3D：不支持</li>
+                    <li>功能：普通电视</li>
+                    <li>尺寸：40-43英寸</li>
+                </ul>
+                <div class="detail-correction">
+                    <b></b>如果您发现商品信息不准确，欢迎纠错
+                </div>
+                <div id="item-desc" class="detail-content">
+                    ${itemDesc.itemDesc }
+                </div>
+            </div>
+            <div class="mc hide" data-widget="tab-content" id="product-detail-2">
+                ${itemParam}
+            </div>
+            <div class="mc  hide" data-widget="tab-content" id="product-detail-3">
+                <div class="item-detail">液晶电视×1、底座×1、遥控器×1、使用说明书×1、电源线×1</div>
+            </div>
+            <div class="mc  hide" data-widget="tab-content" id="product-detail-4"></div>
+            <div class="mc hide " data-widget="tab-content" id="product-detail-5">
+                <div class="item-detail">本产品全国联保，享受三包服务，质保期为：一年质保<br/>本产品提供上门安装调试、提供上门检测和维修等售后服务，自收到商品之日起，如您所购买家电商品出现质量问题，请先联系厂家进行检测
+                    ，凭厂商提供的故障检测证明，在“我的shop-客户服务-返修退换货”页面提交退换申请，将有专业售后人员提供服务。shop承诺您：30天内可为您退货或换货，180天内无需修理直接换货，超过180天按国家三包规定享受服务。<br/>您可以查询本品牌在各地售后服务中心的联系方式，<a
+                            class="link_1" href="http://www.changhong.com">请点击这儿查询......</a><br/>
+                    <br/>售后服务电话：400-811-1666<br/>品牌官方网站：<a href="http://www.changhong.com" target="_blank">http://www.changhong.com</a>
+
+                </div>
+            </div>
+            <div id="product-detail-6" class="mc hide" data-widget="tab-content"></div>
+            <!--知识库二级标签、标题-->
+            <div id="promises">
+                <strong>服务承诺：</strong><br/>
+                shop向您保证所售商品均为正品行货，shop自营商品开具机打发票或电子发票。凭质保证书及shop发票，可享受全国联保服务（奢侈品、钟表除外；奢侈品、钟表由shop联系保修，享受法定三包售后服务），与您亲临商场选购的商品享受相同的质量保证。shop还为您提供具有竞争力的商品价格和<a
+                    href="http://www.jd.com/help/kdexpress.aspx" target="_blank">运费政策</a>，请您放心购买！
+                <br/><br/>
+                注：因厂家会在没有任何提前通知的情况下更改产品包装、产地或者一些附件，本司不能确保客户收到的货物与商城图片、产地、附件说明完全一致。只能确保为原厂正货！并且保证与当时市场上同样主流新品一致。若本商城没有及时更新，请大家谅解！
+            </div>
+            <div id="state">
+                <strong>权利声明：</strong><br/>shop上的所有商品信息、客户评价、商品咨询、网友讨论等内容，是shop重要的经营资源，未经许可，禁止非法转载使用。
+                <p><b>注：</b>本站商品信息均来自于合作方，其真实性、准确性和合法性由信息拥有者（合作方）负责。本站不提供任何保证，并不承担任何法律责任。</p>
+            </div>
+        </div><!--product-detail end-->
+    </div><!--right end-->
+
+    <div class="left">
+        <div id="miaozhen7886" class="m"><a
+                href="http://c.nfa.jd.com/adclick?sid=2&amp;cid=163&amp;aid=817&amp;bid=7853&amp;unit=69570&amp;advid=156740&amp;guv=&amp;url=http://sale.jd.com/act/IFkpQYSVnG1Jet.html"
+                target="_blank"><img data-img="2" width="211" height="261"
+                                     src="http://image.shop.com/images/2014/10/23/2014102305423212301343.jpg"
+                                     class="loading-style2"></a></div>
+        <div id="miaozhen7886" class="m"><a
+                href="http://c.nfa.jd.com/adclick?sid=2&amp;cid=163&amp;aid=817&amp;bid=7853&amp;unit=69570&amp;advid=156740&amp;guv=&amp;url=http://sale.jd.com/act/IFkpQYSVnG1Jet.html"
+                target="_blank"><img data-img="2" width="211" height="261"
+                                     src="http://image.shop.com/images/2014/10/23/2014102305423212301343.jpg"
+                                     class="loading-style2"></a></div>
+    </div><!--left end-->
+    <span class="clr"></span>
+</div>
+<!-- footer start -->
+<jsp:include page="../../../templates/frontstage/commons/footer.jsp"/>
+<!-- footer end -->
+<script type="text/javascript" src="../../frontstage/js/jquery-1.6.4.js"></script>
+<script type="text/javascript" src="../../frontstage/js/lib-v1.js"></script>
+<script type="text/javascript" src="../../frontstage/js/product.js"></script>
+<script type="text/javascript" src="../../frontstage/js/iplocation_server.js"></script>
+<script type="text/javascript">
+    var itemControl = {
+        param: {
+            descUrl: "/item/desc/",
+            paramUrl: "/item/param/"
+        },
+        //请求商品描述
+        getItemDesc: function (itemId) {
+            $.get(itemControl.param.descUrl + itemId + ".html", function (data) {
+                //返回商品描述的html，直接显示到页面
+                $("#item-desc").append(data);
+            });
+        },
+        //参数请求flag
+        haveParam: false,
+        //请求规格参数
+        getItemParam: function (itemId) {
+            //如果没有查询过规格参数，就做请求
+            if (!itemControl.haveParam) {
+                $.get(itemControl.param.paramUrl + itemId + ".html", function (data) {
+                    //返回商品规格的html，直接显示到页面
+                    $("#product-detail-2").append(data);
+                    //更改flag状态
+                    itemControl.haveParam = true;
+                });
+            }
+        }
+    };
+    $(function () {
+        //取商品id
+        var itemId = "${item.id}";
+        //给商品规格参数tab页绑定事件
+        $("#p-con-attr").bind("click", function () {
+
+            itemControl.getItemParam(itemId);
+        });
+        //延迟一秒加载商品描述信息
+        setTimeout(function () {
+            itemControl.getItemDesc(itemId);
+        }, 1000);
+    });
+</script>
+</body>
+</html>
