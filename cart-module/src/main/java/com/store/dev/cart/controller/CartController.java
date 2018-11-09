@@ -51,12 +51,14 @@ public class CartController {
         return getResultWrapper(result);
     }
 
+    // 更新购物车中的商品数量
     @RequestMapping("/updateGoodsNumber")
     public ResultWrapper updateGoodsNumber(@RequestBody CartEntity cartEntity) {
         Integer result = cartService.updateGoodsNumber(cartEntity);
         return getResultWrapper(result);
     }
 
+    // 根据商品ID查询商品信息
     @PostMapping("/goodsMessage")
     public ItemEntity findGoodsByItemId(@RequestBody ItemEntity itemEntity) {
         ItemEntity result = cartService.findGoodsByItemId(itemEntity);
