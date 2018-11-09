@@ -1,5 +1,7 @@
 package com.store.dev.service;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.store.dev.repository.commons.ResultWrapper;
 import com.store.dev.repository.dao.UserEntityRepository;
 import com.store.dev.repository.entity.UserEntity;
@@ -10,6 +12,7 @@ import java.util.Date;
 
 @Service
 public class UserInfoServiceImpl implements UserInfoService{
+    public final static String SECRET_KEY = "UMW23x2w13c9Z";
     @Resource
     private UserEntityRepository userEntityRepository;
 
