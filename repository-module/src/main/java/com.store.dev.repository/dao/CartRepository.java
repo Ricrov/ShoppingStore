@@ -16,7 +16,7 @@ public interface CartRepository extends JpaRepository<CartEntity, Long> {
     @Transactional
     @Modifying
     @Query(value = "delete from tb_cart where user_id = ? and item_id = ?", nativeQuery = true)
-    Integer deleteGoodsByUserId(Long userId, Long itemId);
+    Integer deleteGoodsByUserId(Long userId, Integer itemId);
 
     // 根据当前登录用户ID向购物车中添加指定商品
     @Transactional
@@ -28,4 +28,7 @@ public interface CartRepository extends JpaRepository<CartEntity, Long> {
     @Modifying
     @Query(value = "update tb_cart set goods_number = ? where user_id = ? and item_id = ?", nativeQuery = true)
     Integer updateGoodsNumber(Long goodsNumber, Long userId, Long itemId);
+
+    @Query(value = "select * from tb_cart cart where cart.user_id = ? and cart.item_id = ?", nativeQuery = true)
+    CartEntity findGoods(Long userId, Long itemId);
 }

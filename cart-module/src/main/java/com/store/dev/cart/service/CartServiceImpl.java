@@ -1,5 +1,6 @@
 package com.store.dev.cart.service;
 
+import com.store.dev.repository.commons.ResultWrapper;
 import com.store.dev.repository.dao.CartRepository;
 import com.store.dev.repository.dao.ItemRepository;
 import com.store.dev.repository.dao.UserEntityRepository;
@@ -50,7 +51,7 @@ public class CartServiceImpl implements CartService {
     @Transactional
     @CacheEvict(value = "cartService", allEntries = true)
     @Override
-    public Integer deleteGoodsByUserId(Long userId, Long itemId) {
+    public Integer deleteGoodsByUserId(Long userId, Integer itemId) {
         Integer result = cartRepository.deleteGoodsByUserId(userId, itemId);
         return result;
     }
@@ -73,6 +74,41 @@ public class CartServiceImpl implements CartService {
     public ItemEntity findGoodsByItemId(ItemEntity entity) {
         ItemEntity itemEntity = itemRepository.findById(entity.getItemId()).get();
         return itemEntity;
+    }
+
+    @Transactional
+    @CacheEvict(value = "cartService", allEntries = true)
+    @Override
+    public ResultWrapper deleteGoods(Long userId, List<Integer> itemIds) {
+        try {
+            for (Integer itemId : itemIds) {
+                Integer integer = cartRepository.deleteGoodsByUserId(userId, itemId);
+            }
+            ResultWrapper resultWrapper = new ResultWrapper();
+            resultWrapper.setStatus(200);
+            resultWrapper.setMessage("操作成功");
+            return resultWrapper;
+        } catch (Exception e) {
+            ResultWrapper resultWrapper = new ResultWrapper();
+            resultWrapper.setStatus(303);
+            resultWrapper.setMessage("操作失败");
+            return resultWrapper;
+        }
+    }
+
+    // 根据用户ID和商品ID查询购物车商品信息,如果有这个商品,就更新数量,否则就添加这个商品
+    @Transactional
+    @CacheEvict(value = "cartService", allEntries = true)
+    @Override
+    public Integer findGoods(CartEntity cartEntity) {
+        CartEntity goods = cartRepository.findGoods(cartEntity.getUserId(), cartEntity.getItemId());
+        if (goods != null) {
+            Integer result = cartRepository.updateGoodsNumber(cartEntity.getGoodsNumber(), cartEntity.getUserId(), cartEntity.getItemId());
+            return result;
+        } else {
+            Integer result = cartRepository.addUserCartGoods(cartEntity.getUserId(), cartEntity.getItemId(), cartEntity.getGoodsNumber());
+            return result;
+        }
     }
 
 

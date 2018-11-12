@@ -1,5 +1,6 @@
 package com.store.dev.cart.service;
 
+import com.store.dev.repository.commons.ResultWrapper;
 import com.store.dev.repository.entity.CartEntity;
 import com.store.dev.repository.entity.ItemEntity;
 import com.store.dev.repository.entity.UserEntity;
@@ -19,7 +20,7 @@ public interface CartService {
     UserEntity getOne(Long userId);
 
     // 根据当前登录用户ID删除指定商品
-    Integer deleteGoodsByUserId(Long userId, Long itemId);
+    Integer deleteGoodsByUserId(Long userId, Integer itemId);
 
     // 插入用户购买的商品(用户ID,商品ID,商品数量)
     Integer addUserCartGoods(CartEntity cartEntity);
@@ -29,5 +30,11 @@ public interface CartService {
 
     // 根据商品ID查询商品信息
     ItemEntity findGoodsByItemId(ItemEntity itemId);
+
+    // 根据当前登录用户ID删除指定多个商品
+    ResultWrapper deleteGoods(Long userId, List<Integer> itemIds);
+
+    // 根据用户ID和商品ID查询购物车商品信息,如果有这个商品,就更新数量,否则就添加这个商品
+    Integer findGoods(CartEntity cartEntity);
 
 }

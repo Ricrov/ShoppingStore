@@ -9,7 +9,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 铭
@@ -37,14 +39,16 @@ public class CartController {
     }
 
     // 根据当前登录用户ID删除指定商品
-    @RequestMapping("/deleteGoods/{userId}/{itemId}")
-    public ResultWrapper deleteGoodsByUserId(@PathVariable Long userId, @PathVariable Long itemId) {
-        Integer result = cartService.deleteGoodsByUserId(userId, itemId);
+    @RequestMapping("/deleteGoods/{itemId}")
+    public ResultWrapper deleteGoodsByUserId(@PathVariable Integer itemId) {
+        System.out.println("*************************");
+        System.out.println(itemId);
+        Integer result = cartService.deleteGoodsByUserId(7L, itemId);
         return getResultWrapper(result);
     }
 
     // 插入用户购买的商品(用户ID,商品ID,商品数量)
-    @RequestMapping("/addGoods")
+    @RequestMapping("/addGoodsTest")
     public ResultWrapper addUserCartGoods(@RequestBody CartEntity cartEntity) {
         System.out.println(cartEntity);
         Integer result = cartService.addUserCartGoods(cartEntity);
@@ -62,10 +66,22 @@ public class CartController {
     @PostMapping("/goodsMessage")
     public ItemEntity findGoodsByItemId(@RequestBody ItemEntity itemEntity) {
         ItemEntity result = cartService.findGoodsByItemId(itemEntity);
-        System.out.println(result);
         return result;
     }
 
+    // 批量删除购物车商品
+    @RequestMapping("/deleteItems")
+    public ResultWrapper deleteGoods(@RequestBody Map<String, ArrayList<Integer>> itemIds) {
+        ArrayList<Integer> list = itemIds.get("itemIds");
+        ResultWrapper wrapper = cartService.deleteGoods(7L, list);
+        return wrapper;
+    }
+
+    @PostMapping("/addGoods")
+    public ResultWrapper findGoodsByItemId(@RequestBody CartEntity cartEntity) {
+        Integer result = cartService.findGoods(cartEntity);
+        return getResultWrapper(result);
+    }
 
     private ResultWrapper getResultWrapper(Object result) {
         ResultWrapper resultWrapper = new ResultWrapper();

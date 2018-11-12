@@ -16,6 +16,184 @@
 <script>
     var pageConfig = {};
 </script>
+
+<script>
+
+    itemPrice = 0; // 添加完数量之后的总价
+    itemPrice2 = 0;
+    itemPrice3 = 0;
+    itemPrice4 = 0;
+
+    function addDemo(plus) {
+        console.log(plus);
+        var number = $(plus).prev();
+        var number1 = number.val();
+        number1++;
+        console.log(number1);
+        number.val(number1);
+
+        var totalSkuPrice = $('#totalSkuPrice').attr("moneyTest");
+        if (itemPrice < totalSkuPrice) {
+            itemPrice = totalSkuPrice * 1;
+        }
+        var totalSkuPrice11 = $('#totalSkuPrice');
+        console.log(totalSkuPrice);
+        var totalSkuPrice22 = $('#totalSkuPrice2');
+        var incrementMoney = number.attr("itemPrice");
+        console.log(incrementMoney);
+        itemPrice = itemPrice + (incrementMoney * 1);
+        console.log(itemPrice);
+        totalSkuPrice11.empty();
+        totalSkuPrice11.text(itemPrice);
+        totalSkuPrice22.empty();
+        var itemPrice5 = itemPrice - 10;
+        totalSkuPrice22.text(itemPrice5);
+
+    }
+
+    function reduceDemo(plus) {
+
+        console.log(plus);
+        var number = $(plus).next();
+        var number1 = number.val();
+        console.log(number1);
+        if (number1 > 1) {
+            number1--;
+            number.val(number1);
+        }
+
+        if (number1 > 0) {
+            // 获得总价
+            var totalSkuPrice = $('#totalSkuPrice').text();
+            var totalSkuPrice1 = $('#totalSkuPrice');
+            // 总价
+            itemPrice3 = totalSkuPrice * 1;
+            console.log("总价" + itemPrice3);
+            // 获得单价
+            var incrementMoney = number.attr("itemPrice");
+            // 总价减去单价
+            itemPrice3 = itemPrice3 - (incrementMoney * 1);
+            console.log("总价减去单价后的" + itemPrice3);
+            // 清空以前的总价
+            totalSkuPrice1.empty();
+            if (itemPrice3 < 0) {
+                itemPrice3 = 0;
+            }
+            totalSkuPrice1.text(itemPrice3);
+
+            // 优惠后的价格
+            var totalSkuPrice2 = $('#totalSkuPrice2');
+            totalSkuPrice2.empty();
+            var itemPrice6 = itemPrice3 - 10;
+            if (itemPrice6 < 0) {
+                itemPrice6 = 0;
+            }
+            totalSkuPrice2.text(itemPrice6);
+        }
+        if (number1 == 1) {
+            console.log(number1 + "************************");
+            console.log("value等于1了,不能减少money");
+            var s1 = $('#totalSkuPrice').text();
+            var s2 = $('#totalSkuPrice');
+            // 总价
+            itemPrice4 = s1 * 1;
+            console.log(itemPrice4 + "??????????????????????");
+            console.log("总价" + itemPrice4);
+            // 清空以前的总价
+            s2.empty();
+            if (itemPrice4 < 0) {
+                itemPrice4 = 0;
+            }
+            s2.text(itemPrice4);
+
+            // 优惠后的价格
+            var s3 = $('#totalSkuPrice2');
+            s3.empty();
+            var itemPriceDemo = itemPrice4 - 10;
+            if (itemPriceDemo < 0) {
+                itemPriceDemo = 0;
+            }
+            s3.text(itemPriceDemo);
+        }
+
+    }
+
+    function money() {
+        result = 0;
+        allGoodsNumber = 0;
+        moneyDemo = [];
+        goodsNumber = [];
+
+        $("input[name='checkbox']:checked").each(function (i) {
+            moneyDemo[i] = +$(this).attr("money");
+            goodsNumber[i] = +$(this).attr("goodsNumber");
+        });
+        console.log(moneyDemo);
+        console.log(goodsNumber);
+        for (var i = 0; i < moneyDemo.length && i < goodsNumber.length; i++) {
+            result += moneyDemo[i] * goodsNumber[i];
+            allGoodsNumber += goodsNumber[i];
+            console.log(result);
+        }
+        if (result < 0) {
+            result = 0;
+        }
+        $('#totalSkuPrice').text("¥" + " " + result);
+        result = result - 10;
+        if (result < 0) {
+            result = 0;
+        }
+        $('#totalSkuPrice2').text("¥" + " " + result);
+        console.log(result);
+        $('#goodsNumber').text(allGoodsNumber + "件商品");
+
+    }
+
+    function money02() {
+
+    }
+
+
+    function removeBatch() {
+        var itemIds = [];
+        $("input[name='checkbox']:checked").each(function (i) {
+            itemIds[i] = +$(this).val();
+        });
+        console.log(itemIds);
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8795/cart/deleteItems',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                "itemIds": itemIds
+            }),
+            success: function (resp) {
+                if (resp.status === 200) {
+                    alert(resp.message);
+                    location.reload(true)
+                }
+            }
+        })
+
+    }
+
+</script>
+
+<script>
+    //全选
+    function selectAdmins(inputObj) {
+        var inputArray = document.getElementById("cart-inner").getElementsByTagName("input");
+        for (var i = 1; i < inputArray.length; i++) {
+            if (inputArray[i].type == "checkbox") {
+                inputArray[i].checked = inputObj.checked;
+            }
+        }
+        money()
+    }
+</script>
+
 <body>
 <div id="shortcut"></div>
 <script>
@@ -32,62 +210,68 @@
                 "userId": 7
             },
             success: function (resp) {
-                console.log(resp);
-                console.log(resp.cartEntity);
-                console.log(resp.cartEntity[0].itemEntity);
-                console.log(resp.cartEntity[0].itemEntity.itemDescEntity);
                 var total_price_cart = 0;
-                var total_price_cart_preferential = 0;
                 var product_list = $('#product-list');
                 product_list.empty();
+
+                moneyTest = 0;
+                numberTest = 0;
+
                 for (const item of resp.cartEntity) {
+
+                    moneyTest += item.itemEntity.price * item.goodsNumber;
+                    numberTest += item.goodsNumber;
+
                     console.log(item);
                     var product_item = $('<div id="product_item" data-bind="rowid:1" class="item item_selected "></div>');
                     var item_form = $('<div class="item_form clearfix"></div>');
                     var cell_p_checkbox = $('<div class="cell p-checkbox"></div>');
-                    var input1 = $('<input data-bind="cbid:1" class="checkbox" type="checkbox" name="checkItem" checked="" value="11345721-1">');
-                    cell_p_checkbox.append(input1)
+                    var input1 = $('<input data-bind="cbid:1" onclick="money()" class="checkbox" type="checkbox" name="checkbox" checked="" value="">');
+                    cell_p_checkbox.append(input1);
+                    input1.val(item.itemEntity.itemId);
+                    input1.attr("money", item.itemEntity.price);
+                    input1.attr("goodsNumber", item.goodsNumber);
                     var cell_p_goods = $('<div class="cell p-goods"></div>');
-                    var p_img = $('<div class="p-img"></div>');
+                    var p_img = $('<div><img class="p-img" src="../../frontstage/images/11.jpg" alt="item.itemEntity.title"></div>');
                     var a1 = $('<a target="_blank"></a>');
                     a1.attr("href", "/item/" + item.itemEntity.itemId);
-                    var image1 = $('<image width="52" height="52">')
+                    var image1 = $('<image width="52" height="52">');
                     image1.attr("src", '' + item.itemEntity.image + '');
-                    image1.attr("alt", item.itemEntity.title)
+                    image1.attr("alt", item.itemEntity.title);
                     a1.append(image1);
-                    var p_name = $('<div class="p-name"></div>')
-                    var a2 = $('<a target="_blank"></a>')
+                    var p_name = $('<div class="p-name"></div>');
+                    var a2 = $('<a target="_blank"></a>');
                     a2.attr("href", "item.html?itemId=" + item.itemEntity.itemId);
                     a2.text(item.itemEntity.title);
                     var span1 = $('<span class="promise411 promise411_11345721" id="promise411_11345721"></span>');
                     p_name.append(a2);
                     p_name.append(span1);
-                    var cell_p_price = $('<div class="cell p-price"></div>')
-                    var span2 = $('<span class="price" ></span>')
-                    span2.text("¥" + " " + item.itemEntity.price)
+                    var cell_p_price = $('<div class="cell p-price"></div>');
+                    var span2 = $('<span class="price" ></span>');
+                    span2.text("¥" + " " + item.itemEntity.price);
                     cell_p_price.append(span2);
-                    var cell_p_promotion = $('<div class="cell p-promotion"></div>')
-                    var cell_p_inventory_stock_11345721 = $('<div class="cell p-inventory stock-11345721"></div>')
-                    cell_p_inventory_stock_11345721.text("有货")
-                    var cell_p_quantity = $('<div class="cell p-quantity"></div>')
-                    var quantity_form = $('<div class="quantity-form" data-bind=""></div>')
+                    var cell_p_promotion = $('<div class="cell p-promotion"></div>');
+                    var cell_p_inventory_stock_11345721 = $('<div class="cell p-inventory stock-11345721"></div>');
+                    cell_p_inventory_stock_11345721.text("有货");
+                    var cell_p_quantity = $('<div class="cell p-quantity"></div>');
+                    var quantity_form = $('<div class="quantity-form" data-bind=""></div>');
                     cell_p_quantity.append(quantity_form);
-                    var a3 = $('<a  class="decrement" id="decrement"></a>')
-                    a3.attr("href", "javascript:void(0);")
-                    quantity_form.append(a3)
-                    var input2 = $('<input type="text" class="quantity-text"  id="changeQuantity-11345721-1-1-0">')
+                    var a3 = $('<a  class="decrement" onclick="reduceDemo(this)" id="decrement"></a>');
+                    a3.attr("href", "javascript:void(0);");
+                    quantity_form.append(a3);
+                    var input2 = $('<input name="inputDemo" type="text" class="quantity-text" onblur="money02()" onkeyup="value=(parseInt((value=value.replace(/\\D/g,\'\'))==\'\'||parseInt((value=value.replace(/\\D/g,\'\'))==0)?\'1\':value,10))" id="changeQuantity-11345721-1-1-0">');
                     a3.text("-");
                     input2.attr("itemPrice", item.itemEntity.price);
                     input2.attr("itemId", item.itemEntity.itemId);
                     input2.attr("value", item.goodsNumber);
                     quantity_form.append(input2);
-                    var a4 = $('<a href="javascript:void(0);" class="increment" id="increment"></a>')
+                    var a4 = $('<a href="javascript:void(0);" onclick="addDemo(this)" class="increment" id="increment"></a>')
                     a4.attr("href", "javascript:void(0);")
                     a4.text("+")
                     quantity_form.append(a4);
                     var cell_p_remove = $('<div class="cell p-remove"></div>')
-                    var a5 = $('<a id="remove-11345721-1" data-more="removed-87.20-1" class="cart-remove" href="/cart/delete/${cart.id}.html"></a>')
-                    a5.attr("href", "/cart/delete/" + item.itemEntity.itemId);
+                    var a5 = $('<a id="remove-11345721-1" data-more="removed-87.20-1" href="#" class="cart-remove"></a>')
+                    a5.attr("itemId", item.itemEntity.itemId);
                     a5.text("删除");
                     cell_p_remove.append(a5);
 
@@ -113,9 +297,10 @@
                 cart_toolbar_clearfix.append(total_fr);
                 var p1 = $('<p></p>');
                 p1.text("总计")
-                var span3 = $('<span class="totalSkuPrice"></span>')
+                var span3 = $('<span id="totalSkuPrice" class="totalSkuPrice"></span>')
                 p1.append(span3)
-                span3.text("¥" + " " + total_price_cart);
+                span3.text("¥" + " " + moneyTest);
+                span3.attr("moneyTest", moneyTest);
                 total_fr.append(p1)
                 var p2 = $('<p></p>')
                 p2.text("优惠")
@@ -123,8 +308,8 @@
                 span4.text("- ¥10.00")
                 p2.append(span4)
                 total_fr.append(p2);
-                var amout_fr = $('<div class="amout fr"></div>')
-                amout_fr.text("件商品")
+                var amout_fr = $('<div id="goodsNumber" class="amout fr"></div>')
+                amout_fr.text(numberTest + "件商品")
                 cart_toolbar_clearfix.append(amout_fr);
                 var span5 = $('<span id="selectedCount"></span>')
                 span5.text(1)
@@ -135,15 +320,15 @@
                 cart_dibu_ui_ceilinglamp_current.append(control_fdibu_fdibucurrent);
                 var span6 = $('<span class="column t-checkbox form"></span>')
                 control_fdibu_fdibucurrent.append(span6);
-                var input3 = $('<input data-cart="toggle-cb" name="toggle-checkboxes" id="toggle-checkboxes_down" type="checkbox" checked="" value="" class="jdcheckbox">')
+                var input3 = $('<input data-cart="toggle-cb" name="toggle-checkboxes" id="toggle-checkboxes_up" type="checkbox" value="" onclick="selectAdmins(this);">')
                 span6.append(input3);
-                var label1 = $('<label for="toggle-checkboxes_down"></label>')
+                var label1 = $('<label for="toggle-checkboxes_up"></label>')
                 span6.append(label1);
                 var span7 = $('<span class="delete"></span>')
                 control_fdibu_fdibucurrent.append(span7);
                 var b1 = $('<b></b>')
                 span7.append(b1);
-                var a6 = $('<a href="javascript:void(0);" id="remove-batch"></a>')
+                var a6 = $('<a href="javascript:void(0);" onclick="removeBatch()" id="remove-batch"></a>')
                 span7.append(a6);
                 a6.text("删除选中的商品")
                 var span8 = $('<span class="shopping"></span>')
@@ -159,7 +344,8 @@
                 cart_total_2014.append(cart_button);
                 var span9 = $('<span class="check-comm-btns" id="checkout-jd"></span>')
                 cart_button.append(span9);
-                var a8 = $('<a class="checkout" href="../static/order-cart.html" id="toSettlement"></a>')
+                // ../static/order-cart.html
+                var a8 = $('<a class="checkout" href="#" id="toSettlement"></a>')
                 a8.text("去结算")
                 span9.append(a8);
                 var span10 = $('<span class="combine-btns" style="display:none"></span>')
@@ -180,22 +366,45 @@
                 var total_fr2 = $('<div class="total fr"></div>')
                 cart_total_2014.append(total_fr2);
                 total_fr2.text("总计（不含运费）：")
-                var span13 = $('<span class="totalSkuPrice"></span>')
+                var span13 = $('<span id="totalSkuPrice2" class="totalSkuPrice"></span>')
                 total_fr2.append(span13);
 
                 total_price_cart_preferential = total_price_cart - 10;
-
+                if (total_price_cart_preferential < 0) {
+                    total_price_cart_preferential = 0;
+                }
                 span13.text("¥" + " " + total_price_cart_preferential);
 
             }
         })
 
+
+        $('body').on('click ', '.cart-remove', function () {
+            let itemId = $(this).attr('itemId');
+            console.log(itemId);
+
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:8795/cart/deleteGoods/" + itemId,
+                dataType: "json",
+                contentType: "application/json",
+                success: function (resp) {
+                    console.log(resp);
+                    if (resp.status === 200) {
+                        alert(resp.message);
+                        location.reload(true)
+                    }
+                }
+            })
+        });
+
     })
+
 </script>
 
 <div class="w w1 header clearfix">
-    <div id="logo"><a href="/"><img src="../../frontstage/images/taotao-logo.gif"
-                                    title="返回shop商城首页" alt="返回shop商城首页"></a></div>
+    <div id="logo"><a href="index.html"><img src="../../frontstage/images/taotao-logo.gif"
+                                             title="返回shop商城首页" alt="返回shop商城首页"></a></div>
     <div class="language"><a href="javascript:void(0);" onclick="toEnCart()"></a></div>
     <div class="progress clearfix">
         <ul class="progress-1">
@@ -216,12 +425,16 @@
             <div class="tr"></div>
         </div>
 
-        <div class="cart-inner">
+        <div id="cart-inner" class="cart-inner">
 
             <div class="cart-thead clearfix">
-                <div class="column t-checkbox form"><input data-cart="toggle-cb" name="toggle-checkboxes"
-                                                           id="toggle-checkboxes_up" type="checkbox" checked=""
-                                                           value=""><label for="toggle-checkboxes_up">全选</label></div>
+                <div class="column t-checkbox form">
+                    <input data-cart="toggle-cb"
+                           name="toggle-checkboxes"
+                           id="toggle-checkboxes_up" type="checkbox"
+                           value="" onclick="selectAdmins(this);">
+                    <label for="toggle-checkboxes_up">全选</label>
+                </div>
                 <div class="column t-goods">商品</div>
                 <div class="column t-price">shop价</div>
                 <div class="column t-promotion">优惠</div>
