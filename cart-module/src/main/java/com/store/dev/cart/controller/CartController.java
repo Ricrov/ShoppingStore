@@ -77,6 +77,7 @@ public class CartController {
         return wrapper;
     }
 
+    // 根据用户ID和商品ID查询购物车商品信息,如果有这个商品,就更新数量,否则就添加这个商品
     @PostMapping("/addGoods")
     public ResultWrapper findGoodsByItemId(@RequestBody CartEntity cartEntity) {
         Integer result = cartService.findGoods(cartEntity);
