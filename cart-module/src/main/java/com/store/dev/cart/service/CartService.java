@@ -37,4 +37,7 @@ public interface CartService {
     // 根据用户ID和商品ID查询购物车商品信息,如果有这个商品,就更新数量,否则就添加这个商品
     Integer findGoods(CartEntity cartEntity);
 
+    // 根据很多商品ID查询很多商品信息
+    List<ItemEntity> findGoodsByItemIds(List<Integer> itemIds);
+
 }

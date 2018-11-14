@@ -84,6 +84,14 @@ public class CartController {
         return getResultWrapper(result);
     }
 
+    // 根据很多商品ID查询很多商品信息
+    @PostMapping("/findGoods")
+    public List<ItemEntity> findGoodsByItemId(@RequestBody Map<String, ArrayList<Integer>> map) {
+        ArrayList<Integer> itemIds = map.get("itemIds");
+        List<ItemEntity> goods = cartService.findGoodsByItemIds(itemIds);
+        return goods;
+    }
+
     private ResultWrapper getResultWrapper(Object result) {
         ResultWrapper resultWrapper = new ResultWrapper();
         if (result != null) {
