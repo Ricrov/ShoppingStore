@@ -89,6 +89,7 @@ public class CartController {
     public List<ItemEntity> findGoodsByItemId(@RequestBody Map<String, ArrayList<Integer>> map) {
         ArrayList<Integer> itemIds = map.get("itemIds");
         List<ItemEntity> goods = cartService.findGoodsByItemIds(itemIds);
+
         return goods;
     }
 
