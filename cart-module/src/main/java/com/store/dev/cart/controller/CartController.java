@@ -100,6 +100,7 @@ public class CartController {
         SetOperations<Object, Object> set = redisTemplate.opsForSet();
         Set<Object> members = set.members(key);
         System.out.println(members);
+
         return "";
     }
 
