@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 铭
@@ -120,6 +121,28 @@ public class CartServiceImpl implements CartService {
             list.add(itemEntity);
         }
         return list;
+    }
+
+    @Transactional
+    @CacheEvict(value = "cartService", allEntries = true)
+    @Override
+    public ResultWrapper updateNumberList(Map<String, ArrayList<Long>> itemIdList) {
+        ArrayList<Long> itemIdList2 = itemIdList.get("itemIdList");
+        ArrayList<Long> goodsNumberList2 = itemIdList.get("goodsNumberList");
+        try {
+            for (int i = 0; i < itemIdList2.size() && i < goodsNumberList2.size(); i++) {
+                cartRepository.updateGoodsNumber(goodsNumberList2.get(i), 7L, itemIdList2.get(i));
+            }
+            ResultWrapper resultWrapper = new ResultWrapper();
+            resultWrapper.setStatus(200);
+            resultWrapper.setMessage("操作成功");
+            return resultWrapper;
+        } catch (Exception e) {
+            ResultWrapper resultWrapper = new ResultWrapper();
+            resultWrapper.setStatus(303);
+            resultWrapper.setMessage("操作失败");
+            return resultWrapper;
+        }
     }
 
 

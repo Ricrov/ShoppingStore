@@ -1,17 +1,22 @@
 package com.store.dev.cart.controller;
 
+import com.store.dev.cart.controller.params.CartParams;
 import com.store.dev.cart.service.CartService;
 import com.store.dev.repository.commons.ResultWrapper;
 import com.store.dev.repository.entity.CartEntity;
 import com.store.dev.repository.entity.ItemEntity;
 import com.store.dev.repository.entity.UserEntity;
+import org.springframework.data.redis.core.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author 铭
@@ -23,6 +28,11 @@ public class CartController {
 
     @Resource
     private CartService cartService;
+
+    @Resource
+    private RedisTemplate<Object, Object> redisTemplate;
+
+    private String key;
 
     // 查询所有用户的购物车
     @RequestMapping("/findAll")
@@ -85,12 +95,32 @@ public class CartController {
     }
 
     // 根据很多商品ID查询很多商品信息
-    @PostMapping("/findGoods")
-    public List<ItemEntity> findGoodsByItemId(@RequestBody Map<String, ArrayList<Integer>> map) {
-        ArrayList<Integer> itemIds = map.get("itemIds");
-        List<ItemEntity> goods = cartService.findGoodsByItemIds(itemIds);
+    @GetMapping("/findGoods")
+    public String findGoodsByItemId() {
+        SetOperations<Object, Object> set = redisTemplate.opsForSet();
+        Set<Object> members = set.members(key);
+        System.out.println(members);
+        return "";
+    }
 
-        return goods;
+    // 更新购物车中的许多商品数量
+    @PostMapping("/updateNumberList")
+    public ResultWrapper updateNumberList(@RequestBody Map<String, ArrayList<Long>> itemIdList) {
+        ResultWrapper resultWrapper = cartService.updateNumberList(itemIdList);
+        return resultWrapper;
+    }
+
+    @PostMapping("/itemListRedis")
+    public void itemListRedis(@RequestBody Map<String, List<Map<String, String>>> itemList) {
+        key = "cart:userId:" + "7:" + "itemList";
+        SetOperations<Object, Object> set = redisTemplate.opsForSet();
+        set.add(key, itemList);
+    }
+
+    @PostMapping("/test01")
+    public ResultWrapper Test01(@RequestBody CartParams cartParams) {
+        ResultWrapper result = getResultWrapper(cartParams);
+        return result;
     }
 
     private ResultWrapper getResultWrapper(Object result) {

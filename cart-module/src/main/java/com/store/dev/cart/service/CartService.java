@@ -5,7 +5,9 @@ import com.store.dev.repository.entity.CartEntity;
 import com.store.dev.repository.entity.ItemEntity;
 import com.store.dev.repository.entity.UserEntity;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 铭
@@ -39,5 +41,8 @@ public interface CartService {
 
     // 根据很多商品ID查询很多商品信息
     List<ItemEntity> findGoodsByItemIds(List<Integer> itemIds);
+
+    // 更新购物车中的许多商品数量
+    ResultWrapper updateNumberList(Map<String, ArrayList<Long>> itemIdList);
 
 }

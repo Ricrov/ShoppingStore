@@ -32,10 +32,6 @@
         console.log(number1);
         number.val(number1);
 
-        var totalSkuPrice = $('#totalSkuPrice').attr("moneyTest");
-        if (itemPrice < totalSkuPrice) {
-            itemPrice = totalSkuPrice * 1;
-        }
         var totalSkuPrice11 = $('#totalSkuPrice');
         console.log(totalSkuPrice);
         var totalSkuPrice22 = $('#totalSkuPrice2');
@@ -61,57 +57,48 @@
         if (number1 > 1) {
             number1--;
             number.val(number1);
-        }
 
-        if (number1 > 0) {
-            // 获得总价
-            var totalSkuPrice = $('#totalSkuPrice').text();
+            console.log(number1 + "LLLL]");
+
             var totalSkuPrice1 = $('#totalSkuPrice');
-            // 总价
-            itemPrice3 = totalSkuPrice * 1;
-            console.log("总价" + itemPrice3);
             // 获得单价
             var incrementMoney = number.attr("itemPrice");
             // 总价减去单价
-            itemPrice3 = itemPrice3 - (incrementMoney * 1);
-            console.log("总价减去单价后的" + itemPrice3);
+            itemPrice = itemPrice - (incrementMoney * 1);
+            console.log("总价减去单价后的" + itemPrice);
             // 清空以前的总价
             totalSkuPrice1.empty();
-            if (itemPrice3 < 0) {
-                itemPrice3 = 0;
+            if (itemPrice < 0) {
+                itemPrice = 0;
             }
-            totalSkuPrice1.text(itemPrice3);
+            totalSkuPrice1.text(itemPrice);
 
             // 优惠后的价格
             var totalSkuPrice2 = $('#totalSkuPrice2');
             totalSkuPrice2.empty();
-            var itemPrice6 = itemPrice3 - 10;
+            var itemPrice6 = itemPrice - 10;
             if (itemPrice6 < 0) {
                 itemPrice6 = 0;
             }
             totalSkuPrice2.text(itemPrice6);
             totalSkuPrice2.val(itemPrice6);
         }
-        if (number1 == 1) {
-            console.log(number1 + "************************");
+        if (number1 === 1) {
             console.log("value等于1了,不能减少money");
-            var s1 = $('#totalSkuPrice').text();
             var s2 = $('#totalSkuPrice');
             // 总价
-            itemPrice4 = s1 * 1;
-            console.log(itemPrice4 + "??????????????????????");
-            console.log("总价" + itemPrice4);
+            console.log("总价" + itemPrice);
             // 清空以前的总价
             s2.empty();
-            if (itemPrice4 < 0) {
-                itemPrice4 = 0;
+            if (itemPrice < 0) {
+                itemPrice = 0;
             }
-            s2.text(itemPrice4);
+            s2.text(itemPrice);
 
             // 优惠后的价格
             var s3 = $('#totalSkuPrice2');
             s3.empty();
-            var itemPriceDemo = itemPrice4 - 10;
+            var itemPriceDemo = itemPrice - 10;
             if (itemPriceDemo < 0) {
                 itemPriceDemo = 0;
             }
@@ -154,24 +141,57 @@
     }
 
     function orderCart() {
+        var itemList = [];
         var itemIds = [];
         $("input[name='checkbox']:checked").each(function (i) {
-            itemIds[i] = +$(this).val();
+            itemIds[i] = $(this).val();
         });
-
         var numbers = [];
         var goodsNumberList = [];
         $("input[name='checkbox']:checked").each(function (i) {
             numbers[i] = $(this);
             var demo = numbers[i].parent().siblings("#sss01").find("input");
             var demo2 = demo.val();
-            goodsNumberList[i]  = demo2 * 1;
+            goodsNumberList[i] = demo2;
         });
 
-        var money = 0;
-        var money1 = $('#totalSkuPrice2').val();
-        money = money1 * 1;
-        location.href = 'http://localhost:10086/backstage/html/order-cart.html?itemIds=' + itemIds + '&money=' + money + '&goodsNumberList=' + goodsNumberList
+        for (var i = 0; i < itemIds.length && i < goodsNumberList.length; i++) {
+            itemList[i] = {'itemId': itemIds[i], 'goodsNumber': goodsNumberList[i]}
+        }
+        console.log(itemList);
+
+
+        $.ajax({
+            type: 'post',
+            url: 'http://localhost:8795/cart/itemListRedis',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                'itemList': itemList
+            })
+        });
+
+        $.ajax({
+            type: 'post',
+            url: 'http://localhost:8795/cart/updateNumberList',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                'itemIdList': itemIds,
+                'goodsNumberList': goodsNumberList
+            }),
+            success: function (resp) {
+                if (resp.status === 200) {
+                    var money = 0;
+                    var money1 = $('#totalSkuPrice2').val();
+                    money = money1 * 1;
+                    location.href = 'http://localhost:10086/backstage/html/order-cart.html'
+                }
+            }
+        });
+
+
+
     }
 
 
@@ -199,7 +219,6 @@
         })
 
     }
-
 
 
 </script>
@@ -269,15 +288,20 @@
                     var span1 = $('<span class="promise411 promise411_11345721" id="promise411_11345721"></span>');
                     p_name.append(a2);
                     p_name.append(span1);
-                    var cell_p_price = $('<div class="cell p-price"></div>');
+                    var cell_p_price = $('<div style="text-align: center;" class="cell p-price"></div>');
                     var span2 = $('<span class="price" ></span>');
                     span2.text("¥" + " " + item.itemEntity.price);
                     cell_p_price.append(span2);
-                    var cell_p_promotion = $('<div class="cell p-promotion"></div>');
-                    var sdf = $('<span></span>').text(item.itemEntity.sellPoint);
-                    cell_p_promotion.append(sdf);
+                    var cell_p_promotion = $('<div style="text-align: center;" class="cell p-promotion"></div>');
+                    cell_p_promotion.append(item.itemEntity.sellPoint);
                     var cell_p_inventory_stock_11345721 = $('<div class="cell p-inventory stock-11345721"></div>');
-                    cell_p_inventory_stock_11345721.text("有货");
+                    if (item.itemEntity.num < 10) {
+                        cell_p_inventory_stock_11345721.text("无货");
+                    } else if (item.itemEntity.num > 10) {
+                        cell_p_inventory_stock_11345721.text("有货");
+                    } else {
+                        cell_p_inventory_stock_11345721.text("无货");
+                    }
                     var cell_p_quantity = $('<div id="sss01" class="cell p-quantity"></div>');
                     var quantity_form = $('<div class="quantity-form" data-bind=""></div>');
                     cell_p_quantity.append(quantity_form);
@@ -314,7 +338,7 @@
                         .append(cell_p_remove);
 
                     total_price_cart = total_price_cart + (item.itemEntity.price) * item.goodsNumber;
-
+                    itemPrice = total_price_cart;
                 }
 
                 var cart_toolbar_clearfix = $('#cart_toolbar_clearfix');
@@ -360,7 +384,7 @@
                 control_fdibu_fdibucurrent.append(span8);
                 var b2 = $('<b></b>');
                 span8.append(b2);
-                var a7 = $('<a href="/" target="_blank" id="continue"></a>');
+                var a7 = $('<a href="main.html" target="_blank" id="continue"></a>');
                 a7.text("继续购物");
                 span8.append(a7);
                 var cart_total_2014 = $('<div class="cart-total-2014"></div>');
@@ -463,7 +487,7 @@
                     <label for="toggle-checkboxes_up">全选</label>
                 </div>
                 <div class="column t-goods">商品</div>
-                <div class="column t-price">shop价</div>
+                <div class="column t-price" style="text-align: center;">shop价</div>
                 <div class="column t-promotion">优惠</div>
                 <div class="column t-inventory">库存</div>
                 <div class="column t-quantity">数量</div>
