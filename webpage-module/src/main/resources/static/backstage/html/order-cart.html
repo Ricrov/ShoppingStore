@@ -21,38 +21,33 @@
 
     <script>
 
-        // function show() {
-        //     // $('#orderForm').children().attr('type', 'text');
-        //     var test = [];
-        //     $("input[type='hidden']").each(function (i) {
-        //         test[i] = $(this);
-        //         test[i].type = 'text';
-        //         console.log(test[i]);
-        //     })
-        // }
-
         function submitOrder() {
             var name = $('#name').val();
             var phone = $('#phone').val();
             var address = $('#address').val();
             var paymentType = $("input[type='radio']:checked").val();
-            var itemList = [];
+            var itemList = {};
             var itemPriceList = [];
             var itemIdList = [];
             var itemTitleList = [];
+            var numberList = [];
             $("strong[name='DataList']").each(function (i) {
                 itemPriceList[i] = +$(this).attr('itemPriceList');
                 itemIdList[i] = +$(this).attr('itemIdList');
                 itemTitleList[i] = $(this).attr('itemTitleList');
             });
-            console.log(name);
-            console.log(phone);
-            console.log(address);
-            console.log(paymentType);
-            console.log(itemPriceList);
-            console.log(itemIdList);
-            console.log(itemTitleList);
-            console.log(numberList);
+            $("span[name='numberList']").each(function (i) {
+                numberList[i] = +$(this).text();
+            });
+
+            itemList['name'] = name;
+            itemList['phone'] = phone;
+            itemList['address'] = address;
+            itemList['paymentType'] = paymentType;
+            itemList['itemIdList'] = itemIdList;
+            itemList['numberList'] = numberList;
+            itemList['itemPriceList'] = itemPriceList;
+            itemList['itemTitleList'] = itemTitleList;
 
             $.ajax({
                 type: 'POST',
@@ -60,14 +55,7 @@
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    'name': name,
-                    'phone': phone,
-                    'address': address,
-                    'paymentType': paymentType,
-                    'itemPriceList': itemPriceList,
-                    'itemIdList': itemIdList,
-                    'itemTitleList': itemTitleList,
-                    'itemNumberList': numberList
+                    'itemList': itemList
                 }),
                 success: function (resp) {
                     if (resp.status === 200) {
@@ -82,82 +70,86 @@
     </script>
 
     <script>
-            $.ajax({
-                type: 'get',
-                url: 'http://localhost:8795/cart/findGoods',
-                dataType: 'json',
-                success: function (resp) {
-                    console.log(resp);
-                    var payShipAndSkuInfo = $('#payShipAndSkuInfo');
-                    // payShipAndSkuInfo.empty();
-                    for (var item of resp) {
-                        console.log(item);
-                        var div1 = $('<div class="step-cont" id="skuPayAndShipment-cont"></div>');
-                        var div2 = $('<div class="shopping-lists" id="shopping-lists"></div>');
-                        var div3 = $('<div class="shopping-list ABTest"></div>');
-                        var div4 = $('<div class="goods-list"></div>');
-                        var h4 = $('<h4 class="vendor_name_h" id="0">商家：shop商城</h4>');
-                        var div5 = $('<div class="dis-modes"></div>');
-                        var div16 = $('<div class="mode-item mode-tab"></div>');
-                        var h4_2 = $('<h4> 配送方式：（<a id="jd-goods-item" class="ftx-05 alink" href="#none">对应商品</a>）</h4>');
-                        h4_2.attr('itemId', item.itemId);
-                        var div17 = $('<div class="mode-tab-nav"></div>');
-                        var ul1 = $('<ul></ul>');
-                        var li1 = $('<li class="mode-tab-item " id="jd_shipment_item" onclick="doSwithTab(\'pay\')"></li>');
-                        var span4 = $('<span id="jdShip-span-tip" class="m-txt">shop快递</span>');
-                        var i2 = $('<i class=\'qmark-icon qmark-tip\' data-tips=\'由shop公司负责配送，速度很快，还接受上门刷卡付款服务\'></i>');
-                        var b1 = $('<b></b>');
-                        var div6 = $('<div class="clr"></div>');
-                        var div7 = $(' <div class="freight-cont"></div>');
-                        var strong2 = $('<strong class="ftx-01" style="color: #666" freightByVenderId="0" popJdShipment="false">免运费</strong>');
-                        var div8 = $('<div class="goods-suit goods-last"></div>');
-                        var div9 = $('<div class="goods-item goods-item-extra"></div>');
-                        var div10 = $('<div class="p-img"></div>');
-                        var a1 = $('<a target="_blank" href="/item/${cart.id}.html"></a>');
-                        var img1 = $('<img src="../../frontstage/images/11.jpg" alt="">');
-                        var div11 = $('<div class="goods-msg"></div>');
-                        var div14 = $('<div class="p-name"></div>');
-                        var a2 = $('<a href="/item/${cart.id}.html" target="_blank"></a>').text(item.title);
-                        var div15 = $('<div class="p-price"></div>');
-                        var strong1 = $('<strong name="DataList"></strong>').text('￥ ' + item.price);
-                        strong1.attr("itemPriceList", item.price);
-                        strong1.attr("itemIdList", item.itemId);
-                        strong1.attr("itemTitleList", item.title);
-                        var span2 = $('<span id="numberList" name="numberList" class="ml20"></span>');
-                        var span3 = $('<span class="ml20 p-inventory" skuId="11555193">有货</span>');
-                        var i1 = $('<i class="p-icon p-icon-w"></i>');
-                        var span1 = $('<span class="ftx-04">7天无理由退货</span>');
-                        var div12 = $('<div class="clr"></div>');
+        $.ajax({
+            type: 'get',
+            url: 'http://localhost:8795/cart/findGoods',
+            dataType: 'json',
+            success: function (resp) {
+                console.log(resp);
+                var payShipAndSkuInfo = $('#payShipAndSkuInfo');
 
-                        div7.append(strong2);
+                $('#warePriceId').text(resp.totalPrice);
+                $('#sumPayPriceId').text(resp.preferentialPrice);
+                $('#payPriceId').text(resp.preferentialPrice);
 
-                        span4.append(i2);
-                        li1.append(span4).append(b1);
-                        ul1.append(li1);
-                        div17.append().append(ul1);
-                        div16.append(h4_2).append(div17);
-                        div5.append(div16);
+                for (var item of resp.itemEntities) {
+                    console.log(item);
+                    var div1 = $('<div class="step-cont" id="skuPayAndShipment-cont"></div>');
+                    var div2 = $('<div class="shopping-lists" id="shopping-lists"></div>');
+                    var div3 = $('<div class="shopping-list ABTest"></div>');
+                    var div4 = $('<div class="goods-list"></div>');
+                    var h4 = $('<h4 class="vendor_name_h" id="0">商家：shop商城</h4>');
+                    var div5 = $('<div class="dis-modes"></div>');
+                    var div16 = $('<div class="mode-item mode-tab"></div>');
+                    var h4_2 = $('<h4> 配送方式：（<a id="jd-goods-item" class="ftx-05 alink" href="#none">对应商品</a>）</h4>');
+                    h4_2.attr('itemId', item.itemId);
+                    var div17 = $('<div class="mode-tab-nav"></div>');
+                    var ul1 = $('<ul></ul>');
+                    var li1 = $('<li class="mode-tab-item " id="jd_shipment_item" onclick="doSwithTab(\'pay\')"></li>');
+                    var span4 = $('<span id="jdShip-span-tip" class="m-txt">shop快递</span>');
+                    var i2 = $('<i class=\'qmark-icon qmark-tip\' data-tips=\'由shop公司负责配送，速度很快，还接受上门刷卡付款服务\'></i>');
+                    var b1 = $('<b></b>');
+                    var div6 = $('<div class="clr"></div>');
+                    var div7 = $(' <div class="freight-cont"></div>');
+                    var strong2 = $('<strong class="ftx-01" style="color: #666" freightByVenderId="0" popJdShipment="false">免运费</strong>');
+                    var div8 = $('<div class="goods-suit goods-last"></div>');
+                    var div9 = $('<div class="goods-item goods-item-extra"></div>');
+                    var div10 = $('<div class="p-img"></div>');
+                    var a1 = $('<a target="_blank" href="/item/${cart.id}.html"></a>');
+                    var img1 = $('<img src="../../frontstage/images/11.jpg" alt="">');
+                    var div11 = $('<div class="goods-msg"></div>');
+                    var div14 = $('<div class="p-name"></div>');
+                    var a2 = $('<a href="/item/${cart.id}.html" target="_blank"></a>').text(item.title);
+                    var div15 = $('<div class="p-price"></div>');
+                    var strong1 = $('<strong name="DataList"></strong>').text('￥ ' + item.price);
+                    strong1.attr("itemPriceList", item.price);
+                    strong1.attr("itemIdList", item.itemId);
+                    strong1.attr("itemTitleList", item.title);
+                    var span2 = $('<span id="numberList" name="numberList" class="ml20"></span>');
+                    var span3 = $('<span class="ml20 p-inventory" skuId="11555193">有货</span>');
+                    var i1 = $('<i class="p-icon p-icon-w"></i>');
+                    var span1 = $('<span class="ftx-04">7天无理由退货</span>');
+                    var div12 = $('<div class="clr"></div>');
 
-                        div15.append(strong1).append(span2).append(span3);
-                        div14.append(a2);
-                        div11.append(div14).append(div15).append(i1).append(span1);
-                        a1.append(img1);
-                        div10.append(a1);
-                        div9.append(div10).append(div11).append(div12);
-                        div8.append(div9);
-                        div4.append(h4).append(div8);
-                        div3.append(div4).append(div5).append(div6).append(div7);
-                        div2.append(div3);
-                        div1.append(div2);
-                        payShipAndSkuInfo.append(div1);
-                    }
+                    div7.append(strong2);
 
-                    $("span[name='numberList']").each(function (i) {
-                        $(this).text(numberList[i]);
-                    });
+                    span4.append(i2);
+                    li1.append(span4).append(b1);
+                    ul1.append(li1);
+                    div17.append().append(ul1);
+                    div16.append(h4_2).append(div17);
+                    div5.append(div16);
 
+                    div15.append(strong1).append(span2).append(span3);
+                    div14.append(a2);
+                    div11.append(div14).append(div15).append(i1).append(span1);
+                    a1.append(img1);
+                    div10.append(a1);
+                    div9.append(div10).append(div11).append(div12);
+                    div8.append(div9);
+                    div4.append(h4).append(div8);
+                    div3.append(div4).append(div5).append(div6).append(div7);
+                    div2.append(div3);
+                    div1.append(div2);
+                    payShipAndSkuInfo.append(div1);
                 }
-            });
+
+                $("span[name='numberList']").each(function (i) {
+                    $(this).text(resp.numberList[i]);
+                });
+
+            }
+        });
 
 
     </script>

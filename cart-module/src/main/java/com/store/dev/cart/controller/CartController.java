@@ -13,10 +13,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author 铭
@@ -28,11 +25,6 @@ public class CartController {
 
     @Resource
     private CartService cartService;
-
-    @Resource
-    private RedisTemplate<Object, Object> redisTemplate;
-
-    private String key;
 
     // 查询所有用户的购物车
     @RequestMapping("/findAll")
@@ -51,8 +43,6 @@ public class CartController {
     // 根据当前登录用户ID删除指定商品
     @RequestMapping("/deleteGoods/{itemId}")
     public ResultWrapper deleteGoodsByUserId(@PathVariable Integer itemId) {
-        System.out.println("*************************");
-        System.out.println(itemId);
         Integer result = cartService.deleteGoodsByUserId(7L, itemId);
         return getResultWrapper(result);
     }
@@ -60,7 +50,6 @@ public class CartController {
     // 插入用户购买的商品(用户ID,商品ID,商品数量)
     @RequestMapping("/addGoodsTest")
     public ResultWrapper addUserCartGoods(@RequestBody CartEntity cartEntity) {
-        System.out.println(cartEntity);
         Integer result = cartService.addUserCartGoods(cartEntity);
         return getResultWrapper(result);
     }
@@ -96,12 +85,9 @@ public class CartController {
 
     // 根据很多商品ID查询很多商品信息
     @GetMapping("/findGoods")
-    public String findGoodsByItemId() {
-        SetOperations<Object, Object> set = redisTemplate.opsForSet();
-        Set<Object> members = set.members(key);
-        System.out.println(members);
-
-        return "";
+    public CartParams findGoodsByItemIds() {
+        CartParams result = cartService.findGoodsByItemIds();
+        return result;
     }
 
     // 更新购物车中的许多商品数量
@@ -111,16 +97,27 @@ public class CartController {
         return resultWrapper;
     }
 
+    // 购物车结算时向redis中缓存数据(商品ID的集合和商品数量的集合)
     @PostMapping("/itemListRedis")
-    public void itemListRedis(@RequestBody Map<String, List<Map<String, String>>> itemList) {
-        key = "cart:userId:" + "7:" + "itemList";
-        SetOperations<Object, Object> set = redisTemplate.opsForSet();
-        set.add(key, itemList);
+    public void itemListRedis(@RequestBody Map<String, List<Map<String, Integer>>> itemList) {
+        cartService.itemListRedis(itemList);
     }
 
+    // 插入订单的数据取出方式如下:
     @PostMapping("/test01")
-    public ResultWrapper Test01(@RequestBody CartParams cartParams) {
-        ResultWrapper result = getResultWrapper(cartParams);
+    public ResultWrapper Test01(@RequestBody Map<String, Object> itemList) {
+
+        Map<String,Object> list = (Map<String, Object>) itemList.get("itemList");
+        System.out.println(list);
+        System.out.println("***************");
+        Object name = list.get("name");
+        System.out.println(name);
+        System.out.println("*************");
+        List<Integer> idList = (List<Integer>) list.get("itemIdList");
+        System.out.println(idList);
+
+
+        ResultWrapper result = getResultWrapper(itemList);
         return result;
     }
 

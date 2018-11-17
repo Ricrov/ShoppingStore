@@ -1,5 +1,6 @@
 package com.store.dev.cart.service;
 
+import com.store.dev.cart.controller.params.CartParams;
 import com.store.dev.repository.commons.ResultWrapper;
 import com.store.dev.repository.entity.CartEntity;
 import com.store.dev.repository.entity.ItemEntity;
@@ -40,9 +41,12 @@ public interface CartService {
     Integer findGoods(CartEntity cartEntity);
 
     // 根据很多商品ID查询很多商品信息
-    List<ItemEntity> findGoodsByItemIds(List<Integer> itemIds);
+    CartParams findGoodsByItemIds();
 
     // 更新购物车中的许多商品数量
     ResultWrapper updateNumberList(Map<String, ArrayList<Long>> itemIdList);
+
+    // 购物车结算时向redis中缓存数据(商品ID的集合和商品数量的集合)
+    void itemListRedis(Map<String, List<Map<String, Integer>>> itemList);
 
 }

@@ -1,5 +1,7 @@
 package com.store.dev.cart.service;
 
+import com.alibaba.fastjson.JSON;
+import com.store.dev.cart.controller.params.CartParams;
 import com.store.dev.repository.commons.ResultWrapper;
 import com.store.dev.repository.dao.CartRepository;
 import com.store.dev.repository.dao.ItemRepository;
@@ -7,10 +9,14 @@ import com.store.dev.repository.dao.UserEntityRepository;
 import com.store.dev.repository.entity.CartEntity;
 import com.store.dev.repository.entity.ItemEntity;
 import com.store.dev.repository.entity.UserEntity;
+import com.sun.xml.internal.bind.v2.TODO;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -33,8 +39,10 @@ public class CartServiceImpl implements CartService {
     @Resource
     private ItemRepository itemRepository;
 
-//    @Resource
-//    private RedisTemplate<Object, Object> redisTemplate;
+    private JedisPool pool;
+
+    private Jedis jedis;
+
 
     @Cacheable(value = "cartService")
     @Override
@@ -58,7 +66,6 @@ public class CartServiceImpl implements CartService {
         return result;
     }
 
-    // @CachePut(value = "cartService", key = "#cartEntity")
     @CacheEvict(value = "cartService", allEntries = true)
     @Override
     public Integer addUserCartGoods(CartEntity cartEntity) {
@@ -114,13 +121,55 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<ItemEntity> findGoodsByItemIds(List<Integer> itemIds) {
-        List<ItemEntity> list = new ArrayList<>();
-        for (Integer itemId : itemIds) {
-            ItemEntity itemEntity = itemRepository.findById(Long.valueOf(itemId)).get();
-            list.add(itemEntity);
+    public CartParams findGoodsByItemIds() {
+
+        pool = new JedisPool();
+        jedis = pool.getResource();
+
+        CartParams testDemo = new CartParams();
+
+        List<Map<String, Integer>> itemList = null;
+        // 先从redis里面去查询数据，看是否能获取到对应json字符串
+        String jsonStrLp = jedis.get("itemList");
+
+        // 目的是为了泛型的转换
+        itemList = new ArrayList<Map<String, Integer>>();
+
+        // 先把从redis缓存中取出来的json字符串转为List<Map>集合
+        List<Map> mapList = JSON.parseArray(jsonStrLp, Map.class);
+
+        // 然后循环遍历这个List集合，得出的结果为Map,然后再强转为Map<String,Object>,
+        // 再循环 把 Map<String,Object>添加到List集合中，搞定！！！
+        for (Map map : mapList) {
+            Map<String, Integer> sObj = (Map<String, Integer>) map;
+            itemList.add(sObj);
         }
-        return list;
+
+        List<Integer> itemIdList = new ArrayList<>();
+        List<Integer> goodsNumberList = new ArrayList<>();
+        for (Map<String, Integer> item : itemList) {
+            itemIdList.add(item.get("itemId"));
+            goodsNumberList.add(item.get("goodsNumber"));
+        }
+        List<ItemEntity> itemEntities = new ArrayList<>();
+        for (Integer itemId : itemIdList) {
+            ItemEntity itemEntity = itemRepository.findById(Long.valueOf(itemId)).get();
+            itemEntities.add(itemEntity);
+        }
+
+
+        float price = 0;
+        for (int i = 0; i < itemEntities.size() && i < goodsNumberList.size(); i++) {
+            price += itemEntities.get(i).getPrice() * goodsNumberList.get(i);
+        }
+        System.out.println("总价: " + price);
+
+        testDemo.setItemEntities(itemEntities);
+        testDemo.setNumberList(goodsNumberList);
+        testDemo.setTotalPrice(price);
+        testDemo.setPreferentialPrice(price - 10);
+
+        return testDemo;
     }
 
     @Transactional
@@ -143,6 +192,20 @@ public class CartServiceImpl implements CartService {
             resultWrapper.setMessage("操作失败");
             return resultWrapper;
         }
+    }
+
+    /**
+     * @TODO 缓存ID待优化: key = "cart:userId:7:itemList"
+     * @param itemList
+     */
+    @Override
+    public void itemListRedis(Map<String, List<Map<String, Integer>>> itemList) {
+        pool = new JedisPool();
+        jedis = pool.getResource();
+        List<Map<String, Integer>> maps = itemList.get("itemList");
+        String itemListJson = JSON.toJSONString(maps);
+        jedis.set("itemList", itemListJson);
+        jedis.close();
     }
 
 

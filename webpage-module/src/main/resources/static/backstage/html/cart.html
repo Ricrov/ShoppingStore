@@ -20,9 +20,6 @@
 <script>
 
     itemPrice = 0; // 添加完数量之后的总价
-    itemPrice2 = 0;
-    itemPrice3 = 0;
-    itemPrice4 = 0;
 
     function addDemo(plus) {
         console.log(plus);
@@ -144,7 +141,7 @@
         var itemList = [];
         var itemIds = [];
         $("input[name='checkbox']:checked").each(function (i) {
-            itemIds[i] = $(this).val();
+            itemIds[i] = +$(this).val();
         });
         var numbers = [];
         var goodsNumberList = [];
@@ -152,7 +149,7 @@
             numbers[i] = $(this);
             var demo = numbers[i].parent().siblings("#sss01").find("input");
             var demo2 = demo.val();
-            goodsNumberList[i] = demo2;
+            goodsNumberList[i] = demo2 * 1;
         });
 
         for (var i = 0; i < itemIds.length && i < goodsNumberList.length; i++) {
@@ -189,8 +186,6 @@
                 }
             }
         });
-
-
 
     }
 
