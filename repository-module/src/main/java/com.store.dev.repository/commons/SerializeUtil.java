@@ -5,11 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 
-/**
- *  * @author Administrator
- *  *
- *  
- */
+
 public class SerializeUtil {
     public static byte[] serialize(Object object) {
         ObjectOutputStream oos = null;
