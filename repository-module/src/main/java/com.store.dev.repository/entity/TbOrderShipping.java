@@ -35,6 +35,7 @@ public class TbOrderShipping  implements Serializable {
     private String receiverDistrict;    // 区/县
     private String receiverAddress;     // 收货地址
     private String receiverZip;         // 邮编
+    private String orderId;         // 订单id
     @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private Date created;
     @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")

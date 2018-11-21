@@ -104,22 +104,20 @@ public class CartController {
     }
 
     // 插入订单的数据取出方式如下:
-    @PostMapping("/test01")
-    public ResultWrapper Test01(@RequestBody Map<String, Object> itemList) {
-
-        Map<String, Object> list = (Map<String, Object>) itemList.get("itemList");
-        System.out.println(list);
-        System.out.println("***************");
-        Object name = list.get("name");
-        System.out.println(name);
-        System.out.println("*************");
-        List<Integer> idList = (List<Integer>) list.get("itemIdList");
-        System.out.println(idList);
-
-
-        ResultWrapper result = getResultWrapper(itemList);
-        return result;
-    }
+//    @PostMapping("/test01")
+//    public ResultWrapper Test01(@RequestBody Map<String, Object> itemList) {
+//
+//        Map<String, Object> list = (Map<String, Object>) itemList.get("itemList");
+//        System.out.println(list);
+//        System.out.println("***************");
+//        Object name = list.get("name");
+//        System.out.println(name);
+//        System.out.println("*************");
+//        List<Integer> idList = (List<Integer>) list.get("itemIdList");
+//        System.out.println(idList);
+//        ResultWrapper result = getResultWrapper(itemList);
+//        return result;
+//    }
 
     private ResultWrapper getResultWrapper(Object result) {
         ResultWrapper resultWrapper = new ResultWrapper();

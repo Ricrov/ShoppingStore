@@ -1,6 +1,7 @@
 package com.store.dev.controller;
 
 import com.store.dev.repository.commons.MallResult;
+import com.store.dev.repository.commons.ResultWrapper;
 import com.store.dev.repository.entity.OrderInfo;
 import com.store.dev.repository.entity.TbOrder;
 import com.store.dev.repository.entity.UserEntity;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -33,32 +35,6 @@ public class OrderController {
 
     @Resource
     private OrderService orderService;
-
-
-    /**
-     * 生成订单处理
-     * @param orderInfo
-     * @param model
-     * @return
-     */
-//    @RequestMapping(value = "/order/create",method = RequestMethod.POST)
-//    public String createOrder(OrderInfo orderInfo, Model model){
-//        // 生成订单
-//        MallResult order = orderService.createOrder(orderInfo);
-//        model.addAttribute("orderId",order.getData().toString());
-//        model.addAttribute("payment",orderInfo.getPayment());
-//        // 预计送达时间,
-//        DateTime dateTime = new DateTime();
-//         dateTime = dateTime.plusDays(3);
-//         model.addAttribute("data",dateTime.toString("yyyy-MM-dd"));
-//
-//         return "success";
-//    }
-
-
-
-
-
 
 
     /**
@@ -88,6 +64,7 @@ public class OrderController {
         all.forEach(System.out::println);
         return all;
     }
+
     /**
      * 根据订单号删除订单信息
      *
@@ -100,57 +77,14 @@ public class OrderController {
         orderService.deleteByID(orderId);
     }
 
-
-
-
-
-
-
-
-
-
-//        /**
-//     * 使用Jpa分页显示订单号所有
-//     * @param page
-//     * @param size
-//     * @return
-//     * @throws InvocationTargetException
-//     * @throws IllegalAccessException
-//     */
-//    @RequestMapping("/orderList")
-//    @ResponseBody
-//    public ModelAndView listOrder(@RequestParam(value = "page",defaultValue = "1") int page,
-//                                  @RequestParam(value = "size",defaultValue = "5") int size) throws InvocationTargetException, IllegalAccessException {
-//        ModelAndView modelAndView = new ModelAndView();
-//        PageRequest request = new PageRequest(page-1,size);
-//        Page<TbOrder> orderPage = orderService.findAll(request);
-//        modelAndView.addObject(orderPage);
-//        modelAndView.setViewName("orderList");
-//
-//        return modelAndView;
-//    }
-//
-//    /**
-//     * 使用Jpa分页显示模糊查询
-//     * @param request
-//     * @param page
-//     * @param size
-//     * @return
-//     * @throws InvocationTargetException
-//     * @throws IllegalAccessException
-//     */
-//    @RequestMapping("/search")
-//    public ModelAndView search(HttpServletRequest request,
-//                               @RequestParam(value = "page",defaultValue = "1") int page,
-//                               @RequestParam(value = "size",defaultValue = "5")int size) throws InvocationTargetException, IllegalAccessException {
-//        ModelAndView modelAndView = new ModelAndView();
-//        String query = (request.getParameter("query")).trim();
-//        PageRequest pageRequest = new PageRequest(page-1,size);
-//        Page<TbOrder> search = orderService.findSearch(query, pageRequest);
-//        modelAndView.addObject("search",search);
-//        modelAndView.addObject("query",query);
-//        modelAndView.setViewName("OrderList");
-//        return modelAndView;
-//    }
+    // 插入订单的数据取出方式如下:
+    @PostMapping("/submitOrder")
+    public TbOrder Test01(@RequestBody Map<String, Object> itemList) {
+        Map<String, Object> list = (Map<String, Object>) itemList.get("itemList");
+        System.out.println("Controller层: " + list);
+        TbOrder order = orderService.submitOrder(itemList);
+        System.out.println("Controller层" + order);
+        return order;
+    }
 
 }

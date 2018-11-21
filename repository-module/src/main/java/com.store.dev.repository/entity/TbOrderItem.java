@@ -20,7 +20,7 @@ public class TbOrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderItemId;  // 订单详情Id
     private Long itemId;      // 商品Id
-    private Long orderId;     // 订单Id
+    private String orderId;     // 订单Id
     private Long num;            // 商品购买数量
     private String title;       // 商品标题
     private Long price;          // 商品单价

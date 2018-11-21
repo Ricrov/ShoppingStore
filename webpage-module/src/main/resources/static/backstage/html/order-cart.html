@@ -51,16 +51,17 @@
 
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:8795/cart/test01',
+                url: 'http://localhost:8775/submitOrder',
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify({
                     'itemList': itemList
                 }),
                 success: function (resp) {
-                    if (resp.status === 200) {
-                        alert(resp.message);
-                        location.href = 'http://localhost:10086/backstage/html/success.html'
+                    console.log(resp);
+                    if (resp != null) {
+                        alert("提交订单成功");
+                        location.href = 'http://localhost:10086/backstage/html/success.html?orderId=' + resp.orderId + '&payment=' + resp.payment
                     }
                 }
             })

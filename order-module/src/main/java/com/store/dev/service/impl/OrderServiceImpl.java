@@ -1,4 +1,5 @@
 package com.store.dev.service.impl;
+
 import com.store.dev.Jedis.JedisClient;
 import com.store.dev.repository.commons.MallResult;
 import com.store.dev.repository.dao.TbOrderItemRepository;
@@ -10,9 +11,12 @@ import com.store.dev.service.OrderService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -32,91 +36,10 @@ public class OrderServiceImpl implements OrderService {
     private TbOrderRepository tbOrderRepository;
 
     @Resource
-    private TbOrderItemRepository tbItemRepository;
+    private TbOrderItemRepository tbOrderItemRepository;
 
     @Resource
     private TbOrderShippingRepository tbOrderShippingRepository;
-
-
-//    @Resource
-//    private JedisClient jedisClient;
-//
-//    @Value("${ORDER_GEN_KEY}")
-//    private String ORDER_GEN_KEY;
-//    @Value("${ORDER_INIT_ID}")
-//    private String ORDER_INIT_ID;
-//    @Value("${ORDER_DETAIL_GEN_KEY}")
-//    private String ORDER_DETAIL_GEN_KEY;
-//
-//
-//    @Override
-//    public MallResult createOrder(OrderInfo orderInfo) {
-//        // 生成订单号,使用redis生成订单
-//        if (!jedisClient.exists(ORDER_GEN_KEY)) {
-//            // 判断这个key存在不,设置初始值
-//            jedisClient.set(ORDER_GEN_KEY, ORDER_INIT_ID);
-//        }
-//        Long orderId = jedisClient.incr(ORDER_GEN_KEY);
-//        // 向订单插入数据,补全前端传过来的数据
-//        orderInfo.setOrderId(orderId);
-//        // 免邮费
-//        orderInfo.setPostFee("0");
-//        // //状态：1、未付款，2、已付款，3、未发货，4、已发货，5、交易成功，6、交易关闭
-//        orderInfo.setStatus(1);
-//        // 订单创建时间
-//        orderInfo.setCloseTime(new Date());
-//        orderInfo.setUpdateTime(new Date());
-//        // 向订单表插入数据
-//        tbOrderRepository.save(orderInfo);
-//
-//        // 向订单表插入数据,补全订单表order的entity
-//        List<TbOrderItem> itemList = orderInfo.getOrderItemList();
-//        for (TbOrderItem tbOrderItem : itemList) {
-//            Long oid = jedisClient.incr(ORDER_DETAIL_GEN_KEY);
-//            tbOrderItem.setOrderItemId(oid);
-//            tbOrderItem.setOrderId(orderId);
-//
-//            // 向商品明细表插入数据
-//            tbItemRepository.save(tbOrderItem);
-//        }
-//
-//        TbOrderShipping orderShipping = orderInfo.getOrderShipping();
-//        orderShipping.setOrderShippingId(orderId);
-//        orderShipping.setCreated(new Date());
-//        orderShipping.setUpdated(new Date());
-//
-//        // 向订单物流表插入数据
-//        tbOrderShippingRepository.save(orderShipping);
-//        // 插入完毕后返回订单号
-//        return MallResult.ok();
-//    }
-
-    /**
-     * 查询所有订单数量
-     * @return
-     */
-//    @Override
-//    public int totalCount() {
-//        return tbOrderRepository.totalCount();
-//    }
-
-    /**
-     * 分页以及模糊查询
-     * @param page 当前页
-     * @param count 一页显示的数量
-     * @param searchMsg
-     * @return
-     */
-//    @Override
-//    public List<TbOrder> QueryAll(Integer page,Integer count,String searchMsg) {
-//        List<TbOrder> orderList = tbOrderRepository.findAll();
-//        return orderList;
-//    }
-
-
-
-
-
 
     /**
      * 根据用户Id查询订单
@@ -128,7 +51,6 @@ public class OrderServiceImpl implements OrderService {
     public UserEntity getOne(Long userId) {
         return userEntityRepository.getOne(userId);
     }
-
 
     /**
      * 查询所有用户的订单以及订单项,商品
@@ -152,32 +74,65 @@ public class OrderServiceImpl implements OrderService {
         return null;
     }
 
+    @Transactional
+    @Override
+    public TbOrder submitOrder(Map<String, Object> itemList) {
+        TbOrder tbOrder = new TbOrder();
+        TbOrderShipping tbOrderShipping = new TbOrderShipping();
 
-//    /**
-//     * 查询所有的订单
-//     *
-//     * @param pageable 这个类可以帮助实现分页的功能
-//     * @return
-//     */
-//    @Override
-//    public Page<TbOrder> findAll(Pageable pageable) throws InvocationTargetException, IllegalAccessException {
-//        Page<TbOrder> orderPage = tbOrderRepository.findAll(pageable);
-//        List<TbOrder> orderList = TbOrderConverter.convert(orderPage.getContent());
-//
-//        Page<TbOrder> orderDaoPage = new PageImpl<>(orderList, pageable, orderPage.getTotalElements());
-//
-//        return orderDaoPage;
-//    }
-//
-//    // 根据用户需求进行模糊查询
-//    @Override
-//    public Page<TbOrder> findSearch(String query, Pageable pageable) throws InvocationTargetException, IllegalAccessException {
-//        Page<TbOrder> search = tbOrderRepository.findSearch(query, pageable);
-//        List<TbOrder> orderList = TbOrderConverter.convert(search.getContent());
-//
-//        Page<TbOrder> orderPage = new PageImpl<>(orderList, pageable, search.getTotalElements());
-//        return orderPage;
-//    }
+        Float payment = 0F;
 
+        Map<String, Object> list = (Map<String, Object>) itemList.get("itemList");
+        String name = (String) list.get("name");
+        String phone = (String) list.get("phone");
+        String address = (String) list.get("address");
+        String paymentType = (String) list.get("paymentType");
+        List<Integer> itemIdList = (List<Integer>) list.get("itemIdList");
+        List<Integer> numberList = (List<Integer>) list.get("numberList");
+        List<Integer> itemPriceList = (List<Integer>) list.get("itemPriceList");
+        List<Integer> itemTitleList = (List<Integer>) list.get("itemTitleList");
+
+        for (int i = 0; i < itemIdList.size()
+                && i < numberList.size()
+                && i < itemPriceList.size()
+                && i < itemTitleList.size(); i++) {
+            payment += Long.valueOf(numberList.get(i)) * Long.valueOf(itemPriceList.get(i));
+        }
+
+        UUID randomUUID = UUID.randomUUID();
+        String uuid = randomUUID.toString();
+        tbOrder.setOrderUserId(7L);
+        tbOrder.setPayment(payment - 10);
+        tbOrder.setPaymentType(paymentType);
+        tbOrder.setStatus(2);
+        tbOrder.setCreateTime(new Date());
+        tbOrder.setShippingName("shop快递");
+        tbOrder.setShippingCode(uuid);
+
+        TbOrder order = tbOrderRepository.save(tbOrder);
+
+        for (int i = 0; i < itemIdList.size()
+                && i < numberList.size()
+                && i < itemPriceList.size()
+                && i < itemTitleList.size(); i++) {
+            TbOrderItem tbOrderItem = new TbOrderItem();
+            tbOrderItem.setItemId(Long.valueOf(itemIdList.get(i)));
+            tbOrderItem.setOrderId(order.getOrderId());
+            tbOrderItem.setNum(Long.valueOf(numberList.get(i)));
+            tbOrderItem.setTitle(String.valueOf(itemTitleList.get(i)));
+            tbOrderItem.setPrice(Long.valueOf(itemPriceList.get(i)));
+            TbOrderItem orderItem = tbOrderItemRepository.save(tbOrderItem);
+        }
+
+
+        tbOrderShipping.setReceiverName(name);
+        tbOrderShipping.setReceiverPhone(phone);
+        tbOrderShipping.setReceiverAddress(address);
+        tbOrderShipping.setReceiverZip("321125");
+        tbOrderShipping.setOrderId(order.getOrderId());
+
+        TbOrderShipping orderShipping = tbOrderShippingRepository.save(tbOrderShipping);
+        return order;
+    }
 
 }

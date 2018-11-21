@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -22,13 +23,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
+@GenericGenerator(name = "jpa-uuid", strategy = "uuid")
 public class TbOrder implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;         // 订单Id
-    private String payment;         // 付款金额
-    private Integer paymentType;    // 支付类型
+    @GeneratedValue(generator = "jpa-uuid")
+    private String orderId;           // 订单Id
+    private Float payment;         // 付款金额
+    private String paymentType;    // 支付类型
     private String postFee;         // 邮费(精确到2位小数)
     private Integer status;         // 状态
     @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
@@ -45,9 +47,9 @@ public class TbOrder implements Serializable {
     private Date closeTime;         // 交易关闭
     private String shippingName;    // 物流名称
     private String shippingCode;    // 物流单号
-    private Long orderUserId;             // 用户Id
+    private Long orderUserId;       // 用户Id
     private String buyerMessage;    // 买家留言
-    private String buyerNick;        //买家昵称
+    private String buyerNick;       // 买家昵称
     private int buyerRate;          // 买家评价
 
 

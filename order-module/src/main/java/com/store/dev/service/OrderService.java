@@ -5,6 +5,7 @@ import com.store.dev.repository.entity.*;
 import org.hibernate.criterion.Order;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: MQ
@@ -31,5 +32,8 @@ public interface OrderService {
 //
 //    Page<TbOrder> findSearch(String query, Pageable pageable) throws InvocationTargetException, IllegalAccessException;
 //
+
+
+    TbOrder submitOrder(Map<String, Object> itemList);
 
 }
