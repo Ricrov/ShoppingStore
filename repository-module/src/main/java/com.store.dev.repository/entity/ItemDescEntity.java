@@ -15,7 +15,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class ItemDescEntity implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long itemDescId;

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta http-equiv="Cache-Control" content="max-age=300"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <meta name="Keywords" content="java,shopjava"/>
+    <meta name="description" content="在shop中找到了29910件java的类似商品，其中包含了“图书”，“电子书”，“教育音像”，“骑行运动”等类型的java的商品。"/>
+    <link rel="stylesheet" type="text/css" href="../../frontstage/css/base.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="../../frontstage/css/psearch20131008.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="../../frontstage/css/psearch.onebox.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="../../frontstage/css/pop_compare.css" media="all"/>
+    <script type="text/javascript" src="../../frontstage/js/jquery-1.6.4.js"></script>
+
+</head>
+<body>
+<script type="text/javascript" src="../../frontstage/js/base-2011.js" charset="utf-8"></script>
+<!-- header start -->
+<div id="header"></div>
+<script>
+    $('#header').load("header.html")
+</script>
+<!-- header end -->
+<div class="w main">
+    <div class="crumb" id="keywords"></div>
+    <div class="clr"></div>
+    <div class="m clearfix" id="bottom_pager">
+        <div id="pagin-btm" class="pagin fr" clstag="search|keycount|search|pre-page2">
+            <span class="page-skip" id="page-skip"></span>
+        </div>
+    </div>
+
+    <div class="m psearch " id="plist">
+        <ul class="list-h clearfix" tpl="2" id="item-book">
+        </ul>
+    </div>
+</div>
+<!-- footer start -->
+<div id="footer"></div>
+<script>$('#footer').load("footer.html")</script>
+<!-- footer end -->
+<script type="text/javascript" src="../../frontstage/js/jquery.hashchange.js"></script>
+<script type="text/javascript" src="../../frontstage/js/search_main.js"></script>
+<script type="text/javascript">
+
+</script>
+<script>
+
+    $(document).ready(function () {
+        var keywords = $.Request("keywords");
+        console.log(keywords);
+        var currentPage = $.Request("currentPage");
+        console.log(currentPage);
+        var url = "http://localhost:8785/searchGoods/findAll";
+        if (!(keywords === "" || keywords === null)) {
+            url = "http://localhost:8785/searchGoods/findByTitle?title=" + keywords;
+            if (!(currentPage === "" || currentPage === null)) {
+                url = "http://localhost:8785/searchGoods/findAll?title=" + keywords + "&currentPage=" + currentPage;
+            }
+        } else {
+            if (!(currentPage === "" || currentPage === null)) {
+                url = "http://localhost:8785/searchGoods/findAll?currentPage=" + currentPage;
+            }
+        }
+
+        $.ajax({
+            type: 'get',
+            url: url,
+            success: requestFinished
+        });
+
+
+        function requestFinished(resp) {
+            console.log(resp);
+            $.each(resp, function (i, item) {
+                $("#item-book").append(
+                    "<li class=\"item-book\" bookid=\"11078102\" >" +
+                    "<div class=\"p-img\">" + " <a target=\"_blank\" href=\"item.html?itemId=" + item.itemId + "\">"
+                    + "<img src='../../frontstage/images/11.jpg' itemid=\"" + item.itemId + "\" width=\"160\" height=\"160\" data-img=\"1\"/> " + "</a></div>" +
+                    "<div class=\"p-name\">" + " <a target=\"_blank\" href=\"item.html?itemId=" + item.itemId + "\">" + item.title
+                    + "</a></div>" +
+                    "<div class=\"p-price\">" + "<i>shop价：</i><strong>￥" + (item.price).toFixed(2) + "</strong></div>" + "</li>"
+                );
+            });
+            $("#page-skip").append(
+                "<em>共" + data.totalPage + "页</em>"
+            );
+            $("#keywords").append(
+                "全部结果&nbsp;&gt;&nbsp;<strong>" + data.keyword + "</strong>");
+            var currentPage = parseInt(data.currentPage);//得到当前页数
+            var totalPage = parseInt(data.totalPage);
+            var i = 1;
+            var href = "http://localhost:8785/search.html";
+            if (!(keywords === "" || keywords === null)) href = href + "?keywords=" + keywords;
+            href = href.indexOf("keywords") >= 0 ? href + "&" : href + "?";
+
+            i = parseInt(i);
+            var item = "";
+            if (currentPage === 1) {
+                $('#lastPage').attr('disabled', 'true');
+            }
+            if (currentPage === totalPage) {
+                $('#nextPage').attr('disabled', 'true');
+            }
+            if (totalPage <= 5) {
+                //总页数小于五页，则加载所有页
+                for (i; i <= totalPage; i++) {
+                    if (i === currentPage) {
+                        item += "<span class=\"current\">" + i + "</span>";
+                    } else {
+                        item += "<a href='" + href + "currentPage=" + i + "' >" + i + "</a>";
+                    }
+                }
+                ;
+                $('#pagin-btm').append(
+                    "<a href='" + href + "currentPage=" + (currentPage - 1) + "' id='lastPage'>上一页<b></b></a>" +
+                    item + "<a href='" + href + "currentPage=" + (currentPage + 1) + "' id='nextPage'>下一页<b></b></a>"
+                );
+            } else if (totalPage > 5) {
+                //总页数大于五页，则加载五页
+                if (currentPage < 5) {//当前页小于5，加载1-5页
+                    for (i; i <= 5; i++) {
+                        if (i === currentPage) {
+                            item += "<span class='current'>" + i + "</span>";
+                        } else {
+                            item += "<a href='" + href + "currentPage=" + i + "' >" + i + "</a>";
+                        }
+                    }
+                    ;
+                    if (currentPage <= totalPage - 2) {//最后一页追加“...”代表省略的页
+                        item += "<span> . . . </span>";
+                    }
+                    $('#pagin-btm').append(
+                        "<a href='" + href + "currentPage=" + (currentPage - 1) + "' id='lastPage' class='prev-disabled'>上一页<b></b></a>" +
+                        item + "<a href='" + href + "currentPage=" + (currentPage + 1) + "' id='nextPage'>下一页<b></b></a>"
+                    );
+                } else if (currentPage >= 5) {//当前页大于5页
+                    for (i; i <= 2; i++) {//1,2页码始终显示
+                        item += "<a href='" + href + "currentPage=" + i + "' >" + i + "</a>";
+                    }
+                    item += "<span> . . . </span>";//2页码后面用...代替部分未显示的页码
+                    if (currentPage + 1 === totalPage) {//当前页+1等于总页码
+                        for (i = currentPage - 1; i <= totalPage; i++) {//“...”后面跟三个页码当前页居中显示
+                            if (i === currentPage) {
+                                item += "<span class='current'>" + i + "</span>";
+                            } else {
+                                item += "<a href='" + href + "currentPage=" + i + "' >" + i + "</a>";
+                            }
+                        }
+                    } else if (currentPage === totalPage) {//当前页数等于总页数则是最后一页页码显示在最后
+                        for (i = currentPage - 2; i <= totalPage; i++) {//...后面跟三个页码当前页居中显示
+                            if (i === currentPage) {
+                                item += "<span class='current'>" + i + "</span>";
+                            } else {
+                                item += "<a href='" + href + "currentPage=" + i + "' >" + i + "</a>";
+                            }
+                        }
+                    } else {//当前页小于总页数，则最后一页后面跟...
+                        for (i = currentPage - 1; i <= currentPage + 1; i++) {//dqPage+1页后面...
+                            if (i === currentPage) {
+                                item += "<span class='current'>" + i + "</span>";
+                            } else {
+                                item += "<a href='" + href + "currentPage=" + i + "' >" + i + "</a>";
+                            }
+                        }
+                        item += "<span> . . . </span>";
+                    }
+                    $('#pagin-btm').append(
+                        "<a href='" + href + "currentPage=" + (currentPage - 1) + "' id='lastPage'>上一页<b></b></a>" +
+                        item + "<a href='" + href + "currentPage=" + (currentPage + 1) + "' id='nextPage'>下一页<b></b></a>"
+                    );
+                }
+            }
+        };
+
+
+    });
+
+    $.extend({
+        Request: function (m) {
+            var sValue = location.search.match(new RegExp("[\?\&]" + m + "=([^\&]*)(\&?)", "i"));
+            return sValue ? sValue[1] : sValue;
+        },
+        UrlUpdateParams: function (url, name, value) {
+            var r = url;
+            if (r != null && r != 'undefined' && r != "") {
+                value = encodeURIComponent(value);
+                var reg = new RegExp("(^|)" + name + "=([^&]*)(|$)");
+                var tmp = name + "=" + value;
+                if (url.match(reg) != null) {
+                    r = url.replace(eval(reg), tmp);
+                }
+                else {
+                    if (url.match("[\?]")) {
+                        r = url + "&" + tmp;
+                    } else {
+                        r = url + "?" + tmp;
+                    }
+                }
+            }
+            return r;
+        }
+    })
+
+</script>
+</body>
+</html>
