@@ -16,4 +16,5 @@ include ':config-module',
         ':backstage-module',
         ':login-module',
         ':search-module',
+        ':zuul-gateway',
         ':webpage-module'

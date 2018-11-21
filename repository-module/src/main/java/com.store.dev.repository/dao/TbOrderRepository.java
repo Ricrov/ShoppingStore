@@ -19,12 +19,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TbOrderRepository extends JpaRepository<TbOrder, Long>,
         JpaSpecificationExecutor<TbOrder>{
-
-    int totalCount();
-
-    //根据用户名昵称等信息模糊查询
-    @Query("select orders from tb_order orders where orders.orderId like %?1% ")
-    Page<TbOrder> findSearch(String query, Pageable pageable);
+//
+//    int totalCount();
+//
+//    //根据用户名昵称等信息模糊查询
+//    @Query("select orders from tb_order orders where orders.orderId like %?1% ")
+//    Page<TbOrder> findSearch(String query, Pageable pageable);
 
 
 }

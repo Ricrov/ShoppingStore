@@ -25,7 +25,6 @@ public class ResultWrapper implements Serializable {
         return new ResultWrapper(200,"OK",data);
     }
 
-
     public static ResultWrapper error(int status,String message){
         return new ResultWrapper(status,message,null);
     }

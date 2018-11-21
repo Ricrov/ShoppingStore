@@ -95,10 +95,10 @@ public class OrderServiceImpl implements OrderService {
      * 查询所有订单数量
      * @return
      */
-    @Override
-    public int totalCount() {
-        return tbOrderRepository.totalCount();
-    }
+//    @Override
+//    public int totalCount() {
+//        return tbOrderRepository.totalCount();
+//    }
 
     /**
      * 分页以及模糊查询
@@ -107,11 +107,11 @@ public class OrderServiceImpl implements OrderService {
      * @param searchMsg
      * @return
      */
-    @Override
-    public List<TbOrder> QueryAll(Integer page,Integer count,String searchMsg) {
-        List<TbOrder> orderList = tbOrderRepository.findAll();
-        return orderList;
-    }
+//    @Override
+//    public List<TbOrder> QueryAll(Integer page,Integer count,String searchMsg) {
+//        List<TbOrder> orderList = tbOrderRepository.findAll();
+//        return orderList;
+//    }
 
 
 

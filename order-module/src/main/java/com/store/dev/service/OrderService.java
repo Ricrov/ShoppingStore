@@ -20,9 +20,9 @@ public interface OrderService {
 
     UserEntity getOne(Long userId);
 
-    int totalCount();
-
-    List<TbOrder> QueryAll(Integer page,Integer count,String searchMsg);
+//    int totalCount();
+//
+//    List<TbOrder> QueryAll(Integer page,Integer count,String searchMsg);
 
     MallResult createOrder(OrderInfo orderInfo);
 
