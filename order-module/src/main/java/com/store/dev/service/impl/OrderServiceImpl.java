@@ -38,58 +38,58 @@ public class OrderServiceImpl implements OrderService {
     private TbOrderShippingRepository tbOrderShippingRepository;
 
 
-    @Resource
-    private JedisClient jedisClient;
-
-    @Value("${ORDER_GEN_KEY}")
-    private String ORDER_GEN_KEY;
-    @Value("${ORDER_INIT_ID}")
-    private String ORDER_INIT_ID;
-    @Value("${ORDER_DETAIL_GEN_KEY}")
-    private String ORDER_DETAIL_GEN_KEY;
-
-
-    @Override
-    public MallResult createOrder(OrderInfo orderInfo) {
-        // 生成订单号,使用redis生成订单
-        if (!jedisClient.exists(ORDER_GEN_KEY)) {
-            // 判断这个key存在不,设置初始值
-            jedisClient.set(ORDER_GEN_KEY, ORDER_INIT_ID);
-        }
-        Long orderId = jedisClient.incr(ORDER_GEN_KEY);
-        // 向订单插入数据,补全前端传过来的数据
-        orderInfo.setOrderId(orderId);
-        // 免邮费
-        orderInfo.setPostFee("0");
-        // //状态：1、未付款，2、已付款，3、未发货，4、已发货，5、交易成功，6、交易关闭
-        orderInfo.setStatus(1);
-        // 订单创建时间
-        orderInfo.setCloseTime(new Date());
-        orderInfo.setUpdateTime(new Date());
-        // 向订单表插入数据
-        tbOrderRepository.save(orderInfo);
-
-        // 向订单表插入数据,补全订单表order的entity
-        List<TbOrderItem> itemList = orderInfo.getOrderItemList();
-        for (TbOrderItem tbOrderItem : itemList) {
-            Long oid = jedisClient.incr(ORDER_DETAIL_GEN_KEY);
-            tbOrderItem.setOrderItemId(oid);
-            tbOrderItem.setOrderId(orderId);
-
-            // 向商品明细表插入数据
-            tbItemRepository.save(tbOrderItem);
-        }
-
-        TbOrderShipping orderShipping = orderInfo.getOrderShipping();
-        orderShipping.setOrderShippingId(orderId);
-        orderShipping.setCreated(new Date());
-        orderShipping.setUpdated(new Date());
-
-        // 向订单物流表插入数据
-        tbOrderShippingRepository.save(orderShipping);
-        // 插入完毕后返回订单号
-        return MallResult.ok();
-    }
+//    @Resource
+//    private JedisClient jedisClient;
+//
+//    @Value("${ORDER_GEN_KEY}")
+//    private String ORDER_GEN_KEY;
+//    @Value("${ORDER_INIT_ID}")
+//    private String ORDER_INIT_ID;
+//    @Value("${ORDER_DETAIL_GEN_KEY}")
+//    private String ORDER_DETAIL_GEN_KEY;
+//
+//
+//    @Override
+//    public MallResult createOrder(OrderInfo orderInfo) {
+//        // 生成订单号,使用redis生成订单
+//        if (!jedisClient.exists(ORDER_GEN_KEY)) {
+//            // 判断这个key存在不,设置初始值
+//            jedisClient.set(ORDER_GEN_KEY, ORDER_INIT_ID);
+//        }
+//        Long orderId = jedisClient.incr(ORDER_GEN_KEY);
+//        // 向订单插入数据,补全前端传过来的数据
+//        orderInfo.setOrderId(orderId);
+//        // 免邮费
+//        orderInfo.setPostFee("0");
+//        // //状态：1、未付款，2、已付款，3、未发货，4、已发货，5、交易成功，6、交易关闭
+//        orderInfo.setStatus(1);
+//        // 订单创建时间
+//        orderInfo.setCloseTime(new Date());
+//        orderInfo.setUpdateTime(new Date());
+//        // 向订单表插入数据
+//        tbOrderRepository.save(orderInfo);
+//
+//        // 向订单表插入数据,补全订单表order的entity
+//        List<TbOrderItem> itemList = orderInfo.getOrderItemList();
+//        for (TbOrderItem tbOrderItem : itemList) {
+//            Long oid = jedisClient.incr(ORDER_DETAIL_GEN_KEY);
+//            tbOrderItem.setOrderItemId(oid);
+//            tbOrderItem.setOrderId(orderId);
+//
+//            // 向商品明细表插入数据
+//            tbItemRepository.save(tbOrderItem);
+//        }
+//
+//        TbOrderShipping orderShipping = orderInfo.getOrderShipping();
+//        orderShipping.setOrderShippingId(orderId);
+//        orderShipping.setCreated(new Date());
+//        orderShipping.setUpdated(new Date());
+//
+//        // 向订单物流表插入数据
+//        tbOrderShippingRepository.save(orderShipping);
+//        // 插入完毕后返回订单号
+//        return MallResult.ok();
+//    }
 
     /**
      * 查询所有订单数量

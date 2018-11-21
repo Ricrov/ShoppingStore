@@ -41,19 +41,19 @@ public class OrderController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/order/create",method = RequestMethod.POST)
-    public String createOrder(OrderInfo orderInfo, Model model){
-        // 生成订单
-        MallResult order = orderService.createOrder(orderInfo);
-        model.addAttribute("orderId",order.getData().toString());
-        model.addAttribute("payment",orderInfo.getPayment());
-        // 预计送达时间,
-        DateTime dateTime = new DateTime();
-         dateTime = dateTime.plusDays(3);
-         model.addAttribute("data",dateTime.toString("yyyy-MM-dd"));
-
-         return "success";
-    }
+//    @RequestMapping(value = "/order/create",method = RequestMethod.POST)
+//    public String createOrder(OrderInfo orderInfo, Model model){
+//        // 生成订单
+//        MallResult order = orderService.createOrder(orderInfo);
+//        model.addAttribute("orderId",order.getData().toString());
+//        model.addAttribute("payment",orderInfo.getPayment());
+//        // 预计送达时间,
+//        DateTime dateTime = new DateTime();
+//         dateTime = dateTime.plusDays(3);
+//         model.addAttribute("data",dateTime.toString("yyyy-MM-dd"));
+//
+//         return "success";
+//    }
 
 
 

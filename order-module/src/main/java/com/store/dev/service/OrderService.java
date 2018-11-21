@@ -24,7 +24,7 @@ public interface OrderService {
 //
 //    List<TbOrder> QueryAll(Integer page,Integer count,String searchMsg);
 
-    MallResult createOrder(OrderInfo orderInfo);
+//    MallResult createOrder(OrderInfo orderInfo);
 
 
 //    Page<TbOrder> findAll(Pageable pageable) throws InvocationTargetException, IllegalAccessException;

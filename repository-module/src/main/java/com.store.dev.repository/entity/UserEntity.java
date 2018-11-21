@@ -42,11 +42,6 @@ public class UserEntity implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updated;
 
-//    @OneToMany(targetEntity = TbOrder.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "orderUserId")
-//    private List<TbOrder> orders;
-
-
     @OneToMany(targetEntity = CartEntity.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "userId")
     private List<CartEntity> cartEntity;
