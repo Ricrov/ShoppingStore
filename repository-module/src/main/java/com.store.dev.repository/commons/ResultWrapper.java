@@ -1,9 +1,12 @@
 package com.store.dev.repository.commons;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.Serializable;
 import java.util.List;
 
 
-public class ResultWrapper {
+public class ResultWrapper implements Serializable {
 
     private int status;
     private String message;
@@ -49,4 +52,8 @@ public class ResultWrapper {
     public void setData(Object data) {
         this.data = data;
     }
+
+
+
+
 }

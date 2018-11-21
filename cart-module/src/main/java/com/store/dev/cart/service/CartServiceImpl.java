@@ -47,13 +47,14 @@ public class CartServiceImpl implements CartService {
     @Override
     public List<UserEntity> findAll() {
         List<UserEntity> all = userEntityRepository.findAll();
-        return userEntityRepository.findAll();
+        return all;
     }
 
     @Cacheable(value = "cartService", key = "#userId")
     @Override
     public UserEntity getOne(Long userId) {
         UserEntity one = userEntityRepository.findById(userId).get();
+        System.out.println(one);
         return one;
     }
 

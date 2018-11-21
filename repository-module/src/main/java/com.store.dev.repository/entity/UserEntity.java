@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +41,11 @@ public class UserEntity implements Serializable {
     private Date created;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updated;
+
+//    @OneToMany(targetEntity = TbOrder.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "orderUserId")
+//    private List<TbOrder> orders;
+
 
     @OneToMany(targetEntity = CartEntity.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "userId")
