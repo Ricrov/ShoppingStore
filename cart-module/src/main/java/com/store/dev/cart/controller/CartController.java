@@ -107,7 +107,7 @@ public class CartController {
     @PostMapping("/test01")
     public ResultWrapper Test01(@RequestBody Map<String, Object> itemList) {
 
-        Map<String,Object> list = (Map<String, Object>) itemList.get("itemList");
+        Map<String, Object> list = (Map<String, Object>) itemList.get("itemList");
         System.out.println(list);
         System.out.println("***************");
         Object name = list.get("name");

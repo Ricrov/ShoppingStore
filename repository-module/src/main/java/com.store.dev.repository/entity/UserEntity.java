@@ -27,7 +27,7 @@ import java.util.List;
 public class UserEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "user_id")
     private Long userId;
     @NotBlank(message = "账号不能为空")
     private String username;

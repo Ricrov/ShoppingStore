@@ -23,7 +23,7 @@ import java.util.Map;
 
 /**
  * @author 铭
- *
+ * <p>
  * 2018/11/6 20:43
  */
 @Service
@@ -194,8 +194,8 @@ public class CartServiceImpl implements CartService {
     }
 
     /**
-     * @TODO 缓存ID待优化: key = "cart:userId:7:itemList"
      * @param itemList
+     * @TODO 缓存ID待优化: key = "cart:userId:7:itemList"
      */
     @Override
     public void itemListRedis(Map<String, List<Map<String, Integer>>> itemList) {
