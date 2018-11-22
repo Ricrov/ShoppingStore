@@ -1,14 +1,11 @@
 package com.store.dev.service.impl;
 
-import com.store.dev.Jedis.JedisClient;
-import com.store.dev.repository.commons.MallResult;
 import com.store.dev.repository.dao.TbOrderItemRepository;
 import com.store.dev.repository.dao.TbOrderRepository;
 import com.store.dev.repository.dao.TbOrderShippingRepository;
 import com.store.dev.repository.dao.UserEntityRepository;
 import com.store.dev.repository.entity.*;
 import com.store.dev.service.OrderService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,8 +55,8 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public List<UserEntity> findAll() {
-        List<UserEntity> UserOrderInfo = userEntityRepository.findAll();
+    public List<TbOrder> findAll() {
+        List<TbOrder> UserOrderInfo = tbOrderRepository.findAll();
         return UserOrderInfo;
     }
 

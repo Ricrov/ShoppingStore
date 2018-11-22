@@ -1,23 +1,127 @@
 <!DOCTYPE html>
 <html lang="cn">
-<head>
-    <meta http-equiv="Cache-Control" content="max-age=300"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>我的订单 - shop</title>
-    <meta name="Keywords" content="java,shopjava"/>
-    <meta name="description" content="在shop中找到了29910件java的类似商品，其中包含了“图书”，“电子书”，“教育音像”，“骑行运动”等类型的java的商品。"/>
-    <link rel="stylesheet" type="text/css" href="../../frontstage/css/base.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="../../frontstage/css/myjd.common.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="../../frontstage/css/myjd.order.css" media="all"/>
-    <script type="text/javascript" src="../../frontstage/js/jquery-1.6.4.js"></script>
-    <script type="text/javascript" src="../../frontstage/js/base-2011.js" charset="utf-8"></script>
-</head>
+
+<meta http-equiv="Cache-Control" content="max-age=300"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>我的订单 - shop</title>
+<meta name="Keywords" content="java,shopjava"/>
+<meta name="description" content="在shop中找到了29910件java的类似商品，其中包含了“图书”，“电子书”，“教育音像”，“骑行运动”等类型的java的商品。"/>
+<link rel="stylesheet" type="text/css" href="../../frontstage/css/base.css" media="all"/>
+<link rel="stylesheet" type="text/css" href="../../frontstage/css/myjd.common.css" media="all"/>
+<link rel="stylesheet" type="text/css" href="../../frontstage/css/myjd.order.css" media="all"/>
+<script src="../../frontstage/js/order.common.js"></script>
+<script type="text/javascript" src="../../frontstage/js/jquery-1.6.4.js"></script>
+<script type="text/javascript" src="../../frontstage/js/base-2011.js" charset="utf-8"></script>
+
+<script>
+
+    function PreviousPage(){
+        --currentPage;
+        if (currentPage < 1) {
+            currentPage = 1
+        }
+    }
+
+    $('#next').click(function () {
+        ++currentPage;
+        if (currentPage > pagin) {
+            currentPage = 1;
+        }
+    })
+
+
+    $(function () {
+
+
+        $.ajax({
+            type: 'get',
+            url: 'http://localhost:8775/order/findAll',
+            dataType: 'json',
+            success: function (resp) {
+
+                var tbody = $('#tb-2538292730');
+
+                for (var item of resp) {
+                    console.log(item);
+                    var tr1 = $('<tr class="tr-th"></tr>')
+
+                    var td1 = $('<td colspan="6"></td>')
+
+                    var span = $('<span class="tcol1"></span>').text(item.orderId)
+                    var a = $('<a name="orderIdLinks" id="idUrl2538292730" target="_blank"\n' +
+                        'href="http://order.jd.com/normal/item.action?orderid=2538292730&amp;PassKey=769448C6BA99F1ADA8244BAE7BC60580"\n' +
+                        'clstag="click|keycount|orderinfo|order_num"></a>')
+                    span.append(a)
+                    var span1 = $('<span class="tcol2">shop</span>')
+                    var span2 = $('<span class="tcol3"></span>')
+                    var a1 = $('<a class="btn-im" onclick="getPamsForChat()" href="#none"\n' +
+                        'title="联系客服"></a>')
+                    span2.append(a1)
+                    td1.append(span).append(span1).append(span2)
+                    tr1.append(td1)
+                    var tr2 = $('<tr id="track2538292730" oty="0,1,70" class="tr-td"></tr>')
+                    var td2 = $('<td></td>')
+                    var div1 = $('<div class="img-list"></div>')
+                    var a2 = $('<a href="http://item.jd.com/1113410.html" class="img-box"clstag="click|keycount|orderinfo|order_product" target="_blank"></a>')
+                    var divimg = $('<img title="TP-LINK TL-WR885N 450M无线路由器（白）" width="50" height="50"src="../../frontstage/images/rBEhV1NXYLYIAAAAAADGO8-wV-UAAMfdgNi-BAAAMZT367.jpg"class="err-product">')
+                    a2.append(divimg)
+                    var a3 = $('<a href="http://item.jd.com/1222567.html" class="img-box"clstag="click|keycount|orderinfo|order_product" target="_blank"></a>')
+                    var divimg1 = $('<img title="RND 扁平网线 超高速六类（CAT.6)  超薄扁平  线长为1米5 炫白色" width="50"height="50" src="../../frontstage/images/541fdd63Nab1b3c63.jpg"class="err-product">')
+                    a3.append(divimg1)
+                    div1.append(a2).append(a3)
+                    td2.append(div1)
+                    var td3 = $('<td></td>')
+                    var divname = $('<div class="u-name"></div>')
+                    td3.append(divname)
+                    var td4 = $('<td></td>')
+                    var ss = $('<br>')
+                    var span3 = $('<span></span>').text("￥" + item.payment)
+                    span3.append(ss)
+                    var span4 = $('<span></span>').text(item.paymentType)
+                    td4.append(span3).append(span4)
+                    var td5 = $('<td></td>')
+                    var span5 = $('<span class="ftx-03"></span>').text(item.createTime)
+                    var input1 = $('<input type="hidden" id="datasubmit-2538292730" value="2014-10-20 22:30:49">')
+                    td5.append(span5).append(input1)
+                    var td6 = $('<td></td>')
+                    var span6 = $('<span class="ftx-03"></span>')
+                    if (item.status === 2){
+                        span6.text("已付款")
+                    } else if (item.status === 4) {
+                        span6.text("已发货")
+                    }else if (item.status === 5){
+                        span6.text("交易成功")
+                    }
+                        td6.append(span6)
+                    var td7 = $('<td id="operate2538292730" class="order-doi" width="100"></td>')
+                    var span7 = $('<span id="pay-button-2538292730" state=""></span>')
+                    var a4 = $('<a target="_blank" href="http://order.jd.com/normal/item.action?orderid=2538292730&amp;PassKey=769448C6BA99F1ADA8244BAE7BC60580" clstag="click|keycount|orderinfo|order_check">查看|</a>')
+                    var span8 = $('<span id="order_comment"></span>')
+                    var span9 = $('<span class="pop-recycle-a"></span>')
+                    var ss1 = $('<br>')
+                    var a5 = $('<a href="javascript:void(0)" clstag="click|keycount|orderinfo|order_del" onclick="ensureMoveOrderToRecycle(2538292730,\'397FF574E089D5409E6CC8EF67129D65\');">删除</a>')
+                    a5.append(ss1)
+                    span9.append(a5)
+                    var ss2 = $('<br>')
+                    var span10 = $('<span id="doi2538292730"></span>')
+                    var a6 = $('<a href="http://club.jd.com/JdVote/TradeComment.aspx?ruleid=2538292730&amp;ot=0&amp;payid=1&amp;shipmentid=70" target="_blank" clstag="click|keycount|orderinfo|order_comment">评价晒单</a>')
+                    span10.append(a6)
+                    span10.append(ss2)
+                    var a7 = $('<a  href="http://myjd.jd.com/repair/ordersearchlist.action?searchString=2538292730" target="_blank" clstag="click|keycount|orderinfo|order_repair">申请返修/退换货</a>')
+                    var a8 = $('<a class="btn-again" clstag="click|keycount|orderlist|buy" href="http://cart.jd.com/cart/dynamic/reBuyForOrderCenter.action?wids=1113410,1222567&amp;nums=1,1&amp;rid=1419846299535" target="_blank">还要买</a>')
+                    td7.append(span7).append(a4).append(span8).append(span9).append(span10).append(a7).append(a8)
+                    tr2.append(td2).append(td3).append(td4).append(td5).append(td6).append(td7)
+                    tbody.append(tr1).append(tr2)
+                }
+            }
+        })
+    })
+
+
+</script>
+
 
 <body>
-
-<!-- header start -->
-<!--<include file="commons/footer.html" />-->
-<!-- header end -->
 
 <div id="container">
     <div class="w">
@@ -183,73 +287,66 @@
                                     $("#submitDate").val(1);
                                     $("#orderState").val(4096);
                                 </script>
+
+
                                 <tbody id="tb-2538292730">
 
                                 <tr class="tr-th">
-                                    <td colspan="6">
-                                        <span class="tcol1">
-                                            订单编号:
-                                                <a name="orderIdLinks" id="idUrl2538292730" target="_blank"
-                                                   href="http://order.jd.com/normal/item.action?orderid=2538292730&amp;PassKey=769448C6BA99F1ADA8244BAE7BC60580"
-                                                   clstag="click|keycount|orderinfo|order_num">2538292730</a>
-                                        </span>
-                                        <span class="tcol2">shop</span>
-                                        <span class="tcol3">
-                                                <a class="btn-im" onclick="getPamsForChat()" href="#none"
-                                                   title="联系客服"></a>
-                                        </span>
-                                    </td>
+                                <td colspan="6">
+                                <span class="tcol1">
+                                订单编号:
+                                <a name="orderIdLinks" id="idUrl2538292730" target="_blank"
+                                href="http://order.jd.com/normal/item.action?orderid=2538292730&amp;PassKey=769448C6BA99F1ADA8244BAE7BC60580"
+                                clstag="click|keycount|orderinfo|order_num">2538292730</a>
+                                </span>
+                                <span class="tcol2">shop</span>
+                                <span class="tcol3">
+                                <a class="btn-im" onclick="getPamsForChat()" href="#none"
+                                title="联系客服"></a>
+                                </span>
+                                </td>
                                 </tr>
                                 <tr id="track2538292730" oty="0,1,70" class="tr-td">
-                                    <td>
-                                        <div class="img-list">
-                                            <a href="http://item.jd.com/1113410.html" class="img-box"
-                                               clstag="click|keycount|orderinfo|order_product" target="_blank">
-                                                <img title="TP-LINK TL-WR885N 450M无线路由器（白）" width="50" height="50"
-                                                     src="../../frontstage/images/rBEhV1NXYLYIAAAAAADGO8-wV-UAAMfdgNi-BAAAMZT367.jpg"
-                                                     class="err-product">
-                                            </a>
-                                            <a href="http://item.jd.com/1222567.html" class="img-box"
-                                               clstag="click|keycount|orderinfo|order_product" target="_blank">
-                                                <img title="RND 扁平网线 超高速六类（CAT.6)  超薄扁平  线长为1米5 炫白色" width="50"
-                                                     height="50" src="../../frontstage/images/541fdd63Nab1b3c63.jpg"
-                                                     class="err-product">
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="u-name">张志君</div>
-                                    </td>
-                                    <td>
-                                        ￥108.00<br>
-                                        货到付款<br>
-                                    </td>
-                                    <td>
-                                        <span class="ftx-03">2014-10-20 <br> 22:30:49</span>
-                                        <input type="hidden" id="datasubmit-2538292730" value="2014-10-20 22:30:49">
-                                    </td>
+                                <td>
+                                <div class="img-list">
+                                <a href="http://item.jd.com/1113410.html" class="img-box"
+                                clstag="click|keycount|orderinfo|order_product" target="_blank">
+                                <img title="TP-LINK TL-WR885N 450M无线路由器（白）" width="50" height="50"
+                                src="../../frontstage/images/rBEhV1NXYLYIAAAAAADGO8-wV-UAAMfdgNi-BAAAMZT367.jpg"
+                                class="err-product">
+                                </a>
+                                <a href="http://item.jd.com/1222567.html" class="img-box"
+                                clstag="click|keycount|orderinfo|order_product" target="_blank">
+                                <img title="RND 扁平网线 超高速六类（CAT.6)  超薄扁平  线长为1米5 炫白色" width="50"
+                                height="50" src="../../frontstage/images/541fdd63Nab1b3c63.jpg"
+                                class="err-product">
+                                </a>
+                                </div>
+                                </td>
+                                <td>
+                                <div class="u-name">张志君</div>
+                                </td>
+                                <td>
+                                ￥108.00<br>
+                                货到付款<br>
+                                </td>
+                                <td>
+                                <span class="ftx-03">2014-10-20 <br> 22:30:49</span>
+                                <input type="hidden" id="datasubmit-2538292730" value="2014-10-20 22:30:49">
+                                </td>
 
-                                    <td><span class="ftx-03">已完成</span></td>
+                                <td><span class="ftx-03">已完成</span></td>
 
-                                    <td id="operate2538292730" class="order-doi" width="100">
+                                <td id="operate2538292730" class="order-doi" width="100">
 
-                                        <span id="pay-button-2538292730" state=""></span>
-                                        <a target="_blank"
-                                           href="http://order.jd.com/normal/item.action?orderid=2538292730&amp;PassKey=769448C6BA99F1ADA8244BAE7BC60580"
-                                           clstag="click|keycount|orderinfo|order_check">查看</a><span
-                                            id="order_comment"></span><span class="pop-recycle-a">|<a
-                                            href="javascript:void(0)" clstag="click|keycount|orderinfo|order_del"
-                                            onclick="ensureMoveOrderToRecycle(2538292730,'397FF574E089D5409E6CC8EF67129D65');">删除</a></span><span
-                                            id="doi2538292730"><br><a
-                                            href="http://club.jd.com/JdVote/TradeComment.aspx?ruleid=2538292730&amp;ot=0&amp;payid=1&amp;shipmentid=70"
-                                            target="_blank" clstag="click|keycount|orderinfo|order_comment">评价晒单</a><br></span><a
-                                            href="http://myjd.jd.com/repair/ordersearchlist.action?searchString=2538292730"
-                                            target="_blank" clstag="click|keycount|orderinfo|order_repair">申请返修/退换货</a>
-                                        <a class="btn-again" clstag="click|keycount|orderlist|buy"
-                                           href="http://cart.jd.com/cart/dynamic/reBuyForOrderCenter.action?wids=1113410,1222567&amp;nums=1,1&amp;rid=1419846299535"
-                                           target="_blank">还要买</a>
-
-                                    </td>
+                                <span id="pay-button-2538292730" state=""></span>
+                                <a target="_blank" href="http://order.jd.com/normal/item.action?orderid=2538292730&amp;PassKey=769448C6BA99F1ADA8244BAE7BC60580" clstag="click|keycount|orderinfo|order_check">查看</a>
+                                <span id="order_comment"></span>
+                                <span class="pop-recycle-a">|<a href="javascript:void(0)" clstag="click|keycount|orderinfo|order_del" onclick="ensureMoveOrderToRecycle(2538292730,'397FF574E089D5409E6CC8EF67129D65');">删除</a></span>
+                                <span id="doi2538292730"><br><a href="http://club.jd.com/JdVote/TradeComment.aspx?ruleid=2538292730&amp;ot=0&amp;payid=1&amp;shipmentid=70" target="_blank" clstag="click|keycount|orderinfo|order_comment">评价晒单</a><br></span>
+                                <a href="http://myjd.jd.com/repair/ordersearchlist.action?searchString=2538292730" target="_blank" clstag="click|keycount|orderinfo|order_repair">申请返修/退换货</a>
+                                <a class="btn-again" clstag="click|keycount|orderlist|buy" href="http://cart.jd.com/cart/dynamic/reBuyForOrderCenter.action?wids=1113410,1222567&amp;nums=1,1&amp;rid=1419846299535" target="_blank">还要买</a>
+                                </td>
                                 </tr>
                                 </tbody>
 
@@ -260,7 +357,7 @@
                             <!--分页-->
                             <div class="pagin fr ">
                                 <!--  <span class="text">共20条记录</span>    <span class="text">共1页</span> -->
-                                <span class="prev-disabled" id="prev">上一页<b></b></span>
+                                <span class="prev-disabled" onclick="PreviousPage" id="prev">上一页<b></b></span>
 
                                 <!-- <span class="prev-disabled">首页</span> -->
                                 <ul class="current" id="page"></ul>

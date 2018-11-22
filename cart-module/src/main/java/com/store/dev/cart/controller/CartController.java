@@ -6,12 +6,10 @@ import com.store.dev.repository.commons.ResultWrapper;
 import com.store.dev.repository.entity.CartEntity;
 import com.store.dev.repository.entity.ItemEntity;
 import com.store.dev.repository.entity.UserEntity;
-import org.springframework.data.redis.core.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-
 import javax.annotation.Resource;
 import java.util.*;
 
@@ -21,6 +19,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/cart")
+@Api(description = "用户的购物车")
 public class CartController {
 
     @Resource
@@ -34,6 +33,7 @@ public class CartController {
     }
 
     // 查询当前登录用户的购物车
+    @ApiOperation(value = "查询当前登录用户的购物车", notes = "根据token取出用户ID")
     @RequestMapping("/list")
     public UserEntity getOne(@Param("userId") Long userId) {
         UserEntity one = cartService.getOne(userId);
@@ -41,6 +41,7 @@ public class CartController {
     }
 
     // 根据当前登录用户ID删除指定商品
+    @ApiOperation(value = "根据当前登录用户ID删除指定商品", notes = "接收REST风格的参数形式")
     @RequestMapping("/deleteGoods/{itemId}")
     public ResultWrapper deleteGoodsByUserId(@PathVariable Integer itemId) {
         Integer result = cartService.deleteGoodsByUserId(7L, itemId);
@@ -48,12 +49,14 @@ public class CartController {
     }
 
     // 插入用户购买的商品(用户ID,商品ID,商品数量)
+    @ApiOperation(value = "向购物车中插入用户购买的商品", notes = "接收json类型数据")
     @RequestMapping("/addGoodsTest")
     public ResultWrapper addUserCartGoods(@RequestBody CartEntity cartEntity) {
         Integer result = cartService.addUserCartGoods(cartEntity);
         return getResultWrapper(result);
     }
 
+    @ApiOperation(value = "根据用户ID和商品ID更新购物车中的商品数量", notes = "接收json数据")
     // 更新购物车中的商品数量
     @RequestMapping("/updateGoodsNumber")
     public ResultWrapper updateGoodsNumber(@RequestBody CartEntity cartEntity) {
@@ -61,6 +64,7 @@ public class CartController {
         return getResultWrapper(result);
     }
 
+    @ApiOperation(value = "根据商品ID查询商品信息", notes = "接收json数据")
     // 根据商品ID查询商品信息
     @PostMapping("/goodsMessage")
     public ItemEntity findGoodsByItemId(@RequestBody ItemEntity itemEntity) {
@@ -68,6 +72,8 @@ public class CartController {
         return result;
     }
 
+
+    @ApiOperation(value = "根据用户ID和商品ID的集合批量删除购物车中的商品", notes = "接收json数据,例子: Map<String, ArrayList<Integer>> itemIds")
     // 批量删除购物车商品
     @RequestMapping("/deleteItems")
     public ResultWrapper deleteGoods(@RequestBody Map<String, ArrayList<Integer>> itemIds) {
@@ -76,6 +82,7 @@ public class CartController {
         return wrapper;
     }
 
+    @ApiOperation(value = "根据用户ID和商品ID查询购物车商品信息,如果有这个商品,就更新数量,否则就添加这个商品", notes = "接收json数据")
     // 根据用户ID和商品ID查询购物车商品信息,如果有这个商品,就更新数量,否则就添加这个商品
     @PostMapping("/addGoods")
     public ResultWrapper findGoodsByItemId(@RequestBody CartEntity cartEntity) {
@@ -90,10 +97,11 @@ public class CartController {
         return result;
     }
 
+    @ApiOperation(value = "根据商品ID集合更新购物车中的许多商品数量", notes = "接收json数据,例子: Map<String, ArrayList<Long>> itemList")
     // 更新购物车中的许多商品数量
     @PostMapping("/updateNumberList")
-    public ResultWrapper updateNumberList(@RequestBody Map<String, ArrayList<Long>> itemIdList) {
-        ResultWrapper resultWrapper = cartService.updateNumberList(itemIdList);
+    public ResultWrapper updateNumberList(@RequestBody Map<String, ArrayList<Long>> itemList) {
+        ResultWrapper resultWrapper = cartService.updateNumberList(itemList);
         return resultWrapper;
     }
 
@@ -103,21 +111,6 @@ public class CartController {
         cartService.itemListRedis(itemList);
     }
 
-    // 插入订单的数据取出方式如下:
-//    @PostMapping("/test01")
-//    public ResultWrapper Test01(@RequestBody Map<String, Object> itemList) {
-//
-//        Map<String, Object> list = (Map<String, Object>) itemList.get("itemList");
-//        System.out.println(list);
-//        System.out.println("***************");
-//        Object name = list.get("name");
-//        System.out.println(name);
-//        System.out.println("*************");
-//        List<Integer> idList = (List<Integer>) list.get("itemIdList");
-//        System.out.println(idList);
-//        ResultWrapper result = getResultWrapper(itemList);
-//        return result;
-//    }
 
     private ResultWrapper getResultWrapper(Object result) {
         ResultWrapper resultWrapper = new ResultWrapper();

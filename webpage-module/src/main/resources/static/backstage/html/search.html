@@ -54,13 +54,8 @@
         var url = "http://localhost:8785/searchGoods/findAll";
         if (!(keywords === "" || keywords === null)) {
             url = "http://localhost:8785/searchGoods/findByTitle?title=" + keywords;
-            if (!(currentPage === "" || currentPage === null)) {
-                url = "http://localhost:8785/searchGoods/findAll?title=" + keywords + "&currentPage=" + currentPage;
-            }
         } else {
-            if (!(currentPage === "" || currentPage === null)) {
-                url = "http://localhost:8785/searchGoods/findAll?currentPage=" + currentPage;
-            }
+            url = "http://localhost:8785/searchGoods/findAll";
         }
 
         $.ajax({

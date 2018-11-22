@@ -30,6 +30,7 @@ import java.util.Map;
  * @Date: 2018/11/7 14:05
  */
 @RestController
+@RequestMapping("/order")
 public class OrderController {
 
 
@@ -44,7 +45,6 @@ public class OrderController {
      * @return
      */
     @RequestMapping("/getUserOrder")
-    @ResponseBody
     public UserEntity getUserOrder(@Param("userId") Long userId) {
         UserEntity one = orderService.getOne(userId);
         System.out.println(one);
@@ -58,9 +58,8 @@ public class OrderController {
      * @return
      */
     @RequestMapping("/findAll")
-    @ResponseBody
-    public List<UserEntity> findAll() {
-        List<UserEntity> all = orderService.findAll();
+    public List<TbOrder> findAll() {
+        List<TbOrder> all = orderService.findAll();
         all.forEach(System.out::println);
         return all;
     }
@@ -76,6 +75,11 @@ public class OrderController {
     public void delete(@Param("orderId") Long orderId) {
         orderService.deleteByID(orderId);
     }
+
+
+
+
+
 
     // 插入订单的数据取出方式如下:
     @PostMapping("/submitOrder")
