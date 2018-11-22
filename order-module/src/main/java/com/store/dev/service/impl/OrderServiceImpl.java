@@ -58,9 +58,9 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public List<UserEntity> findAll() {
-        List<UserEntity> UserOrderInfo = userEntityRepository.findAll();
-        return UserOrderInfo;
+    public List<TbOrder> findAll() {
+        List<TbOrder> userOrderInfo = tbOrderRepository.findAll();
+        return userOrderInfo;
     }
 
     /**

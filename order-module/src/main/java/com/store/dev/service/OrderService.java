@@ -17,22 +17,9 @@ public interface OrderService {
 
     TbOrder deleteByID(Long Order);
 
-    List<UserEntity> findAll();
+    List<TbOrder> findAll();
 
     UserEntity getOne(Long userId);
-
-//    int totalCount();
-//
-//    List<TbOrder> QueryAll(Integer page,Integer count,String searchMsg);
-
-//    MallResult createOrder(OrderInfo orderInfo);
-
-
-//    Page<TbOrder> findAll(Pageable pageable) throws InvocationTargetException, IllegalAccessException;
-//
-//    Page<TbOrder> findSearch(String query, Pageable pageable) throws InvocationTargetException, IllegalAccessException;
-//
-
 
     TbOrder submitOrder(Map<String, Object> itemList);
 

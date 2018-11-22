@@ -44,7 +44,6 @@ public class OrderController {
      * @return
      */
     @RequestMapping("/getUserOrder")
-    @ResponseBody
     public UserEntity getUserOrder(@Param("userId") Long userId) {
         UserEntity one = orderService.getOne(userId);
         System.out.println(one);
@@ -58,9 +57,8 @@ public class OrderController {
      * @return
      */
     @RequestMapping("/findAll")
-    @ResponseBody
-    public List<UserEntity> findAll() {
-        List<UserEntity> all = orderService.findAll();
+    public List<TbOrder> findAll() {
+        List<TbOrder> all = orderService.findAll();
         all.forEach(System.out::println);
         return all;
     }
@@ -81,9 +79,7 @@ public class OrderController {
     @PostMapping("/submitOrder")
     public TbOrder Test01(@RequestBody Map<String, Object> itemList) {
         Map<String, Object> list = (Map<String, Object>) itemList.get("itemList");
-        System.out.println("Controller层: " + list);
         TbOrder order = orderService.submitOrder(itemList);
-        System.out.println("Controller层" + order);
         return order;
     }
 
