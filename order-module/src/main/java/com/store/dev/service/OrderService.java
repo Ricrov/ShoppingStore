@@ -15,12 +15,14 @@ import java.util.Map;
 public interface OrderService {
 
 
-    TbOrder deleteByID(Long Order);
+    Integer delOrderId(String orderId);
 
     List<TbOrder> findAll();
 
-    UserEntity getOne(Long userId);
+    TbOrder getOrderOneId(String orderId);
 
     TbOrder submitOrder(Map<String, Object> itemList);
+
+
 
 }

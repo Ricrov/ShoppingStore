@@ -38,15 +38,19 @@ public class OrderController {
     private OrderService orderService;
 
 
+
+
     /**
      * 根据用户Id查询订单以及商品详情
      *
-     * @param userId
+     * @param
      * @return
      */
-    @RequestMapping("/getUserOrder")
-    public UserEntity getUserOrder(@Param("userId") Long userId) {
-        UserEntity one = orderService.getOne(userId);
+    @RequestMapping("/getOrderId")
+    public TbOrder getOrderId(@RequestBody TbOrder tbOrder) {
+        String orderId = tbOrder.getOrderId();
+        System.out.println(orderId);
+        TbOrder one = orderService.getOrderOneId(orderId);
         System.out.println(one);
         return one;
     }
@@ -67,27 +71,22 @@ public class OrderController {
     /**
      * 根据订单号删除订单信息
      *
-     * @param orderId
+     * @param
      */
 
     @RequestMapping("/deleteById")
-    @ResponseBody
-    public void delete(@Param("orderId") Long orderId) {
-        orderService.deleteByID(orderId);
+    public Integer delete(@RequestBody TbOrder tbOrder) {
+        String orderId = tbOrder.getOrderId();
+        System.out.println(orderId);
+        Integer integer = orderService.delOrderId(orderId);
+        return integer;
     }
-
-
-
-
-
 
     // 插入订单的数据取出方式如下:
     @PostMapping("/submitOrder")
     public TbOrder Test01(@RequestBody Map<String, Object> itemList) {
         Map<String, Object> list = (Map<String, Object>) itemList.get("itemList");
-        System.out.println("Controller层: " + list);
         TbOrder order = orderService.submitOrder(itemList);
-        System.out.println("Controller层" + order);
         return order;
     }
 

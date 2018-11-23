@@ -41,12 +41,12 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 根据用户Id查询订单
      *
-     * @param userId 用户id
+     * @param orderId 用户id
      * @return
      */
     @Override
-    public UserEntity getOne(Long userId) {
-        return userEntityRepository.getOne(userId);
+    public TbOrder getOrderOneId(String orderId) {
+        return tbOrderRepository.getOrderId(orderId);
     }
 
     /**
@@ -63,11 +63,11 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 根据订单编号删除订单
      *
-     * @param Order
+     * @param orderId
      */
     @Override
-    public TbOrder deleteByID(Long Order) {
-        tbOrderRepository.deleteById(Order);
+    public Integer delOrderId(String orderId) {
+        tbOrderRepository.delOrderId(orderId);
         return null;
     }
 
