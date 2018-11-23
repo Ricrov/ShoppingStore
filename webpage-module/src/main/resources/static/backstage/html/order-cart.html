@@ -49,22 +49,27 @@
             itemList['itemPriceList'] = itemPriceList;
             itemList['itemTitleList'] = itemTitleList;
 
-            $.ajax({
-                type: 'POST',
-                url: 'http://localhost:8775/submitOrder',
-                dataType: 'json',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    'itemList': itemList
-                }),
-                success: function (resp) {
-                    console.log(resp);
-                    if (resp != null) {
-                        alert("提交订单成功");
-                        location.href = 'http://localhost:10086/backstage/html/success.html?orderId=' + resp.orderId + '&payment=' + resp.payment
+            if (!''.equals(name) && !''.equals(phone) && !''.equals(address) && !''.equals(paymentType)) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:8775/submitOrder',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        'itemList': itemList
+                    }),
+                    success: function (resp) {
+                        console.log(resp);
+                        if (resp != null) {
+                            alert("提交订单成功");
+                            location.href = 'http://localhost:10086/backstage/html/success.html?orderId=' + resp.orderId + '&payment=' + resp.payment
+                        }
                     }
-                }
-            })
+                })
+            } else {
+                alert('请补全信息!')
+            }
+
 
         }
 
@@ -157,7 +162,6 @@
 
 </head>
 <body id="mainframe">
-<!--<jsp:include page="../../../templates/frontstage/commons/shortcut.jsp"/>-->
 <!--shortcut end-->
 
 <div class="w w1 header clearfix">
@@ -193,9 +197,6 @@
                     <!--  /widget/consignee-step/consignee-step.tpl -->
                     <div class="step-tit">
                         <h3>收货人信息</h3>
-                        <!--<div class="extra-r">-->
-                        <!--<a href="#none" class="ftx-05">新增收货地址</a>-->
-                        <!--</div>-->
                     </div>
                     <div class="step-cont">
                         <div class="consignee-list" id="consignee-list1">
@@ -213,25 +214,6 @@
                                             姓名:&nbsp;&nbsp;<input id="name" type="text" value=""><br>
                                             电话:&nbsp;&nbsp;<input id="phone" type="text" value=""><br>
                                             地址:&nbsp;&nbsp;<input id="address" type="text" value=""><br>
-                                            <!--<div class="user-name">-->
-                                            <!--<div class="fl">-->
-                                            <!--<strong limit="4">入云龙</strong>&nbsp;&nbsp;收-->
-                                            <!--</div>-->
-                                            <!--<div class="fr">158****8888</div>-->
-                                            <!--<div class="clr"></div>-->
-                                            <!--</div>-->
-                                            <!--<div class="mt10" limit="15">北京 昌平区 五环外六环里</div>-->
-                                            <!--<div class="adr-m" limit="30">西三旗 xxxxxxxxx</div>-->
-                                            <!--<div class="op-btns ar">-->
-                                            <!--<a href="#none"-->
-                                            <!--class="ftx-05 mr10 setdefault-consignee hide"-->
-                                            <!--fid="137617472">设为默认地址</a>-->
-                                            <!--<a id="showFrom" onclick="show()" href="#"-->
-                                            <!--class="ftx-05 mr10 edit-consignee"-->
-                                            <!--fid="137617472">编辑</a>-->
-                                            <!--<a href="#none" class="ftx-05 del-consignee hide"-->
-                                            <!--fid="137617472">删除</a>-->
-                                            <!--</div>-->
                                         </div>
                                     </li>
                                     <!---->
@@ -249,63 +231,10 @@
                             <div class="step-cont">
                                 <div class="payment-list" id="">
                                     <div class="list-cont">
-                                        <!--<ul id="payment-list">-->
-                                        <!--<input type="hidden" id="instalmentPlan" value="false">-->
                                         <label><input name="s" type="radio" value="货到付款">货到付款</label>
                                         <label><input name="s" type="radio" value="在线支付">在线支付</label>
                                         <label><input name="s" type="radio" value="公司转账">公司转账</label>
                                         <label><input name="s" type="radio" value="邮局汇款">邮局汇款</label>
-                                        <!--<li style="cursor: pointer;" onclick="save_Pay(1);">-->
-                                        <!--<div class="payment-item item-selected online-payment "-->
-                                        <!--for="pay-method-1" payname="货到付款" payid="1">-->
-                                        <!--<b></b> 货到付款<span class="qmark-icon qmark-tip"-->
-                                        <!--data-tips="送货上门后再收款，支持现金、POS机刷卡、支票支付 <a href='http://help.jd.com/help/distribution-768-2-2813-2863-0-1410707152669.html' target='_blank' class='ftx-05'>查看服务及配送范围</a>"></span>-->
-                                        <!--&lt;!&ndash;  span class="qmark-icon qmark-tip" data-tips="在线支付，支持绝大多数银行借记卡及部分银行信用卡 <a href='http://help.jd.com/help/question-68.html' target='_blank' class='ftx-05'>查看银行及限额</a>"></span &ndash;&gt;-->
-                                        <!--&lt;!&ndash; span class="qmark-icon qmark-tip" data-tips="送货上门后再收款，支持现金、POS机刷卡、支票支付 <a target='_blank' href='http://psfw.jd.com/help/distribution-768.html-2-2825-2893-0-1427094595258.html'>查看服务及配送范围</a>"></span &ndash;&gt;-->
-                                        <!--</div>-->
-                                        <!--</li>-->
-                                        <!--<li style="cursor: pointer;" onclick="save_Pay(4);">-->
-
-                                        <!--<div class="payment-item  online-payment "-->
-                                        <!--for="pay-method-4" payname="在线支付" payid="4">-->
-                                        <!--<b></b> 在线支付 <font class="whiteBarSpanClass hide"-->
-                                        <!--color="#FF6600">[支持打白条]</font> <span-->
-                                        <!--class="qmark-icon qmark-tip"-->
-                                        <!--data-tips="即时到帐，支持绝大数银行借记卡及部分银行信用卡 <a href='http://www.jd.com/help/onlinepay.aspx' target='_blank' class='ftx-05'> 查看银行及限额</a>"></span>-->
-                                        <!--&lt;!&ndash;  span class="qmark-icon qmark-tip" data-tips="在线支付，支持绝大多数银行借记卡及部分银行信用卡 <a href='http://help.jd.com/help/question-68.html' target='_blank' class='ftx-05'>查看银行及限额</a>"></span &ndash;&gt;-->
-                                        <!--&lt;!&ndash; span class="qmark-icon qmark-tip" data-tips="即时到帐，支持绝大数银行借记卡及部分银行信用卡 <a target='_blank' href='http://www.jd.com/help/onlinepay.aspx'>查看银行及限额</a>"></span &ndash;&gt;-->
-                                        <!--</div>-->
-                                        <!--</li>-->
-
-                                        <!--<li style="cursor: pointer;" onclick="save_Pay(5); ">-->
-
-                                        <!--<div class="payment-item online-payment "-->
-                                        <!--for="pay-method-5" payname="公司转账" payid="5">-->
-                                        <!--<b></b> 公司转账 <span class="qmark-icon qmark-tip"-->
-                                        <!--data-tips="通过快钱平台转账 转帐后1-3个工作日内到帐 <a href='http://help.jd.com/help/question-70.html' target='_blank' class='ftx-05'>查看帐户信息</a>"></span>-->
-                                        <!--&lt;!&ndash;  span class="qmark-icon qmark-tip" data-tips="在线支付，支持绝大多数银行借记卡及部分银行信用卡 <a href='http://help.jd.com/help/question-68.html' target='_blank' class='ftx-05'>查看银行及限额</a>"></span &ndash;&gt;-->
-                                        <!--&lt;!&ndash; span class="qmark-icon qmark-tip" data-tips="通过快钱平台转账 转帐后1-3个工作日内到帐 <a target='_blank' href='http://help.jd.com/help/question-70.html'>查看帐户信息</a>"></span &ndash;&gt;-->
-                                        <!--</div>-->
-                                        <!--</li>-->
-                                        <!--<li style="cursor: pointer;" onclick="save_Pay(2); ">-->
-
-                                        <!--<div class="payment-item  online-payment "-->
-                                        <!--for="pay-method-2" payname="邮局汇款" payid="2">-->
-                                        <!--<b></b> 邮局汇款 <span class="qmark-icon qmark-tip"-->
-                                        <!--data-tips="通过快钱平台收款 汇款后1-3个工作日到账 <a href='http://help.jd.com/help/question-69.html' target='_blank' class='ftx-05'>查看帮助</a>"></span>-->
-                                        <!--&lt;!&ndash;  span class="qmark-icon qmark-tip" data-tips="在线支付，支持绝大多数银行借记卡及部分银行信用卡 <a href='http://help.jd.com/help/question-68.html' target='_blank' class='ftx-05'>查看银行及限额</a>"></span &ndash;&gt;-->
-                                        <!--&lt;!&ndash; span class="qmark-icon qmark-tip" data-tips="通过快钱平台收款  汇款后1-3个工作日到账 <a target='_blank' href='http://help.jd.com/help/question-69.html'>查看帮助</a>"></span &ndash;&gt;-->
-                                        <!--</div>-->
-                                        <!--</li>-->
-                                        <!--&lt;!&ndash;div id="shipment"></div&ndash;&gt;-->
-                                        <!--<script>-->
-                                        <!--$('.online-payment').hover(function () {-->
-                                        <!--$(this).addClass('payment-item-hover');-->
-                                        <!--}, function () {-->
-                                        <!--$(this).removeClass('payment-item-hover');-->
-                                        <!--});-->
-                                        <!--</script>-->
-                                        <!--</ul>-->
                                     </div>
                                 </div>
                             </div>
@@ -323,17 +252,6 @@
             </div>
         </div>
 
-        <!--<div class="step-tit">-->
-        <!--<h3>发票信息</h3>-->
-        <!--</div>-->
-        <!--<div class="step-content">-->
-        <!--<div id="part-inv" class="invoice-cont">-->
-        <!--<span class="mr10"> 普通发票（电子） &nbsp; </span>-->
-        <!--<span class="mr10">个人 &nbsp; </span>-->
-        <!--<span class="mr10"> &nbsp; </span> 明细-->
-        <!--<a href="#none" class="ftx-05 invoice-edit" onclick="edit_Invoice()">修改</a>-->
-        <!--</div>-->
-        <!--</div>-->
         <div class="order-summary">
             <!--  预售 计算支付展现方式 begin -->
             <div class="statistic fr">
@@ -392,6 +310,5 @@
 </div>
 
 <!-- /main -->
-<!--<jsp:include page="../../../templates/frontstage/commons/footer.jsp"/>-->
 </body>
 </html>

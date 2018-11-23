@@ -1,24 +1,11 @@
 package com.store.dev.controller;
 
-import com.store.dev.repository.commons.MallResult;
-import com.store.dev.repository.commons.ResultWrapper;
-import com.store.dev.repository.entity.OrderInfo;
 import com.store.dev.repository.entity.TbOrder;
 import com.store.dev.repository.entity.UserEntity;
 import com.store.dev.service.OrderService;
-
-import org.joda.time.DateTime;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.repository.query.Param;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
@@ -75,7 +62,7 @@ public class OrderController {
         orderService.deleteByID(orderId);
     }
 
-    // 插入订单的数据取出方式如下:
+
     @PostMapping("/submitOrder")
     public TbOrder Test01(@RequestBody Map<String, Object> itemList) {
         Map<String, Object> list = (Map<String, Object>) itemList.get("itemList");
