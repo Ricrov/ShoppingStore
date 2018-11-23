@@ -1,14 +1,11 @@
 package com.store.dev.service.impl;
 
-import com.store.dev.Jedis.JedisClient;
-import com.store.dev.repository.commons.MallResult;
 import com.store.dev.repository.dao.TbOrderItemRepository;
 import com.store.dev.repository.dao.TbOrderRepository;
 import com.store.dev.repository.dao.TbOrderShippingRepository;
 import com.store.dev.repository.dao.UserEntityRepository;
 import com.store.dev.repository.entity.*;
 import com.store.dev.service.OrderService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,12 +41,12 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 根据用户Id查询订单
      *
-     * @param userId 用户id
+     * @param orderId 用户id
      * @return
      */
     @Override
-    public UserEntity getOne(Long userId) {
-        return userEntityRepository.getOne(userId);
+    public TbOrder getOrderOneId(String orderId) {
+        return tbOrderRepository.getOrderId(orderId);
     }
 
     /**
@@ -59,18 +56,18 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public List<TbOrder> findAll() {
-        List<TbOrder> userOrderInfo = tbOrderRepository.findAll();
-        return userOrderInfo;
+        List<TbOrder> UserOrderInfo = tbOrderRepository.findAll();
+        return UserOrderInfo;
     }
 
     /**
      * 根据订单编号删除订单
      *
-     * @param Order
+     * @param orderId
      */
     @Override
-    public TbOrder deleteByID(Long Order) {
-        tbOrderRepository.deleteById(Order);
+    public Integer delOrderId(String orderId) {
+        tbOrderRepository.delOrderId(orderId);
         return null;
     }
 

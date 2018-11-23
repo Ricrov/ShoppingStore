@@ -5,10 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -19,6 +19,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TbOrderRepository extends JpaRepository<TbOrder, Long>,
         JpaSpecificationExecutor<TbOrder>{
+
+    @Query(value = "select * from tb_order where order_id = ?",nativeQuery = true)
+    TbOrder getOrderId(String orderId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "delete from tb_order where order_id = ?",nativeQuery = true)
+    Integer delOrderId(String orderId);
+
+
+
 //
 //    int totalCount();
 //

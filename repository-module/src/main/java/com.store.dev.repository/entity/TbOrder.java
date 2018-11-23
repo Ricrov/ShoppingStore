@@ -57,10 +57,9 @@ public class TbOrder implements Serializable {
     @JoinColumn(name = "orderId")
     private List<TbOrderItem> tbOrderItem;
 
-//    @OneToOne
+//    @OneToOne(targetEntity = TbOrderShipping.class)
 //    @JoinColumn(name = "orderId",referencedColumnName = "orderShippingId",insertable = false,updatable = false)
 //    private TbOrderShipping tbOrderShipping;
-
 
 
 
