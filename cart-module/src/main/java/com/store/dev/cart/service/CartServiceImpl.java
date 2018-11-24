@@ -2,6 +2,7 @@ package com.store.dev.cart.service;
 
 import com.alibaba.fastjson.JSON;
 import com.store.dev.cart.controller.params.CartParams;
+import com.store.dev.repository.commons.GetUserIp;
 import com.store.dev.repository.commons.ResultWrapper;
 import com.store.dev.repository.dao.CartRepository;
 import com.store.dev.repository.dao.ItemRepository;
@@ -9,6 +10,7 @@ import com.store.dev.repository.dao.UserEntityRepository;
 import com.store.dev.repository.entity.CartEntity;
 import com.store.dev.repository.entity.ItemEntity;
 import com.store.dev.repository.entity.UserEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +45,9 @@ public class CartServiceImpl implements CartService {
 
     private Jedis jedis;
 
+    @Autowired
+    private HttpServletRequest request;
+
 
     @Cacheable(value = "cartService")
     @Override
@@ -53,8 +59,11 @@ public class CartServiceImpl implements CartService {
     @Cacheable(value = "cartService", key = "#userId")
     @Override
     public UserEntity getOne(Long userId) {
-        UserEntity one = userEntityRepository.findById(userId).get();
-        System.out.println(one);
+        System.out.println(userId + "***************");
+        UserEntity one = userEntityRepository.findUserCart(userId);
+        String userIP = GetUserIp.getIpAddr(request);
+        System.out.println("*************************");
+        System.out.println(userIP);
         return one;
     }
 
@@ -69,8 +78,13 @@ public class CartServiceImpl implements CartService {
     @CacheEvict(value = "cartService", allEntries = true)
     @Override
     public Integer addUserCartGoods(CartEntity cartEntity) {
+//        if (cartEntity.getUserId() != null) {
         Integer result = cartRepository.addUserCartGoods(cartEntity.getUserId(), cartEntity.getItemId(), cartEntity.getGoodsNumber());
         return result;
+//        } else {
+//
+//        }
+//        return null;
     }
 
     @CacheEvict(value = "cartService", allEntries = true)

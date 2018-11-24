@@ -49,26 +49,27 @@
             itemList['itemPriceList'] = itemPriceList;
             itemList['itemTitleList'] = itemTitleList;
 
-            if (!''.equals(name) && !''.equals(phone) && !''.equals(address) && !''.equals(paymentType)) {
-                $.ajax({
-                    type: 'POST',
-                    url: 'http://localhost:8775/submitOrder',
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        'itemList': itemList
-                    }),
-                    success: function (resp) {
-                        console.log(resp);
-                        if (resp != null) {
-                            alert("提交订单成功");
-                            location.href = 'http://localhost:10086/backstage/html/success.html?orderId=' + resp.orderId + '&payment=' + resp.payment
-                        }
+            console.log(name);
+            console.log(phone);
+            console.log(address);
+            console.log(paymentType);
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:8775/order/submitOrder',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    'itemList': itemList
+                }),
+                success: function (resp) {
+                    console.log(resp);
+                    if (resp != null) {
+                        alert("提交订单成功");
+                        location.href = 'http://localhost:10086/backstage/html/success.html?orderId=' + resp.orderId + '&payment=' + resp.payment
                     }
-                })
-            } else {
-                alert('请补全信息!')
-            }
+                }
+            })
 
 
         }

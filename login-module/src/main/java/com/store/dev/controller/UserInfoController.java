@@ -49,9 +49,8 @@ public class UserInfoController{
         return userInfoService.addNewUser(user);
     }
 
-    @GetMapping("test")
+    @GetMapping("/test")
     public List<UserEntity> test() {
         return repository.findAll();
     }
-
 }
