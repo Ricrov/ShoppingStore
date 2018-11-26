@@ -140,7 +140,7 @@
         console.log(resp);
         var tbody = $('#tb-2538292730');
         tbody.empty();
-
+        sssss = 0;
         for (var item of resp) {
             console.log(item);
             var tr1 = $('<tr class="tr-th"></tr>')
@@ -171,7 +171,8 @@
             div1.append(a2).append(a3)
             td2.append(div1)
             var td3 = $('<td></td>')
-            var divname = $('<div class="u-name"></div>')
+            var divname = $('<div class="u-name"></div>').text("张三" + sssss);
+            sssss++;
             td3.append(divname)
             var td4 = $('<td></td>')
             var ss = $('<br>')
