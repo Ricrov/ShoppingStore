@@ -20,7 +20,7 @@ public class GetUserIp {
         }
         if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
-            if(ip.equals("172.16.16.178")){
+            if(ip.equals("172.16.16.134")){
                 //根据网卡取本机配置的IP
                 InetAddress inet=null;
                 try {
