@@ -1,9 +1,6 @@
 package com.store.dev.service.impl;
 
-import com.store.dev.repository.dao.TbOrderItemRepository;
-import com.store.dev.repository.dao.TbOrderRepository;
-import com.store.dev.repository.dao.TbOrderShippingRepository;
-import com.store.dev.repository.dao.UserEntityRepository;
+import com.store.dev.repository.dao.*;
 import com.store.dev.repository.entity.*;
 import com.store.dev.service.OrderService;
 import org.springframework.stereotype.Service;
@@ -37,6 +34,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Resource
     private TbOrderShippingRepository tbOrderShippingRepository;
+
+    @Resource
+    private CartRepository cartRepository;
 
     /**
      * 根据用户Id查询订单
@@ -94,6 +94,7 @@ public class OrderServiceImpl implements OrderService {
                 && i < itemPriceList.size()
                 && i < itemTitleList.size(); i++) {
             payment += Long.valueOf(numberList.get(i)) * Long.valueOf(itemPriceList.get(i));
+            cartRepository.deleteGoodsByUserId(7L, itemIdList.get(i));
         }
 
         UUID randomUUID = UUID.randomUUID();

@@ -34,6 +34,8 @@ public interface CartService {
     // 根据商品ID查询商品信息
     ItemEntity findGoodsByItemId(ItemEntity itemId);
 
+    ItemEntity findRedisCart(Long itemId);
+
     // 根据当前登录用户ID删除指定多个商品
     ResultWrapper deleteGoods(Long userId, List<Integer> itemIds);
 

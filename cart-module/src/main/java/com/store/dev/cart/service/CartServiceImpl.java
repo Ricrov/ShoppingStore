@@ -45,9 +45,6 @@ public class CartServiceImpl implements CartService {
 
     private Jedis jedis;
 
-    @Autowired
-    private HttpServletRequest request;
-
 
     @Cacheable(value = "cartService")
     @Override
@@ -59,11 +56,7 @@ public class CartServiceImpl implements CartService {
     @Cacheable(value = "cartService", key = "#userId")
     @Override
     public UserEntity getOne(Long userId) {
-        System.out.println(userId + "***************");
         UserEntity one = userEntityRepository.findUserCart(userId);
-        String userIP = GetUserIp.getIpAddr(request);
-        System.out.println("*************************");
-        System.out.println(userIP);
         return one;
     }
 
@@ -78,13 +71,8 @@ public class CartServiceImpl implements CartService {
     @CacheEvict(value = "cartService", allEntries = true)
     @Override
     public Integer addUserCartGoods(CartEntity cartEntity) {
-//        if (cartEntity.getUserId() != null) {
         Integer result = cartRepository.addUserCartGoods(cartEntity.getUserId(), cartEntity.getItemId(), cartEntity.getGoodsNumber());
         return result;
-//        } else {
-//
-//        }
-//        return null;
     }
 
     @CacheEvict(value = "cartService", allEntries = true)
@@ -96,6 +84,12 @@ public class CartServiceImpl implements CartService {
     @Override
     public ItemEntity findGoodsByItemId(ItemEntity entity) {
         ItemEntity itemEntity = itemRepository.findById(entity.getItemId()).get();
+        return itemEntity;
+    }
+
+    @Override
+    public ItemEntity findRedisCart(Long itemId) {
+        ItemEntity itemEntity = itemRepository.findById(itemId).get();
         return itemEntity;
     }
 

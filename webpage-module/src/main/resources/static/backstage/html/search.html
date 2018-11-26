@@ -37,133 +37,50 @@
 </div>
 <!-- footer start -->
 <div id="footer"></div>
-<script>
-    $('#footer').load("footer.html")
-</script>
+<script>$('#footer').load("footer.html")</script>
 <!-- footer end -->
 <script type="text/javascript" src="../../frontstage/js/jquery.hashchange.js"></script>
 <script type="text/javascript" src="../../frontstage/js/search_main.js"></script>
 <script type="text/javascript">
+
 </script>
 <script>
+
     $(document).ready(function () {
-        var q = $.Request("q");
+        var keywords = $.Request("keywords");
+        console.log(keywords);
         var currentPage = $.Request("currentPage");
-        var url = "http://localhost:8785/search/show";
-        if (!(q === "" || q === null)) {
-            url = "http://localhost:8785/search/show?q=" + q;
-            if (!(currentPage === "" || currentPage === null)) {
-                url = "http://localhost:8785/search/show?q=" + q + "&currentPage=" + currentPage;
-            }
+        console.log(currentPage);
+        var url = "http://172.16.16.55:8785/searchGoods/findAll";
+        if (!(keywords === "" || keywords === null)) {
+            url = "http://172.16.16.55:8785/searchGoods/findByTitle?title=" + keywords;
         } else {
-            if (!(currentPage === "" || currentPage === null)) {
-                url = "http://localhost:8785/search/show?currentPage=" + currentPage;
-            }
+            url = "http://172.16.16.55:8785/searchGoods/findAll";
         }
-        $.get(url, function (resp) {
+
+        $.ajax({
+            type: 'get',
+            url: url,
+            success: requestFinished
+        });
+
+
+        function requestFinished(resp) {
             console.log(resp);
-            var data = resp;
-            $.each(data.list, function (i, item) {
+            $.each(resp, function (i, item) {
                 $("#item-book").append(
                     "<li class=\"item-book\" bookid=\"11078102\" >" +
-                    "<div class=\"p-img\">" + " <a target=\"_blank\" href=\"../../frontstage/images/11.jpg" + item.itemId + "\">"
-                    + "<img width=\"160\" height=\"160\" data-img=\"1\" data-lazyload=\"" + item.image + " \"/> " + "</a></div>" +
-                    "<div class=\"p-name\">" + " <a target=\"_blank\" href=\"../../frontstage/images/11.jpg" + item.itemId + "\">" + item.title
+                    "<div class=\"p-img\">" + " <a target=\"_blank\" href=\"item.html?itemId=" + item.itemId + "\">"
+                    + "<img src='../../frontstage/images/11.jpg' itemid=\"" + item.itemId + "\" width=\"160\" height=\"160\" data-img=\"1\"/> " + "</a></div>" +
+                    "<div class=\"p-name\">" + " <a target=\"_blank\" href=\"item.html?itemId=" + item.itemId + "\">" + item.title
                     + "</a></div>" +
-                    "<div class=\"p-price\">" + "<i>shop价：</i><strong>￥" + (item.price / 1000).toFixed(2) + "</strong></div>" + "</li>"
+                    "<div class=\"p-price\">" + "<i>shop价：</i><strong>￥" + (item.price).toFixed(2) + "</strong></div>" + "</li>"
                 );
             });
-            $("#page-skip").append(
-                "<em>共" + data.totalPage + "页</em>"
-            )
-            $("#q").append(
-                "全部结果&nbsp;&gt;&nbsp;<strong>" + data.keyword + "</strong>");
-            var currentPage = parseInt(data.currentPage);//得到当前页数
-            var totalPage = parseInt(data.totalPage);
-            var i = 1;
-            var href = "http://localhost:10086/backstage/html/search.html";
-            if (!(q === "" || q === null)) href = href + "?q=" + q;
-            href = href.indexOf("q") >= 0 ? href + "&" : href + "?";
 
-            i = parseInt(i);
-            var item = "";
-            if (currentPage === 1) {
-                $('#lastPage').attr('disabled', 'true');
-            }
-            if (currentPage === totalPage) {
-                $('#nextPage').attr('disabled', 'true');
-            }
-            if (totalPage <= 5) {
-                //总页数小于五页，则加载所有页
-                for (i; i <= totalPage; i++) {
-                    if (i === currentPage) {
-                        item += "<span class=\"current\">" + i + "</span>";
-                    } else {
-                        item += "<a href='" + href + "currentPage=" + i + "' >" + i + "</a>";
-                    }
-                }
-                ;
-                $('#pagin-btm').append(
-                    "<a href='" + href + "currentPage=" + (currentPage - 1) + "' id='lastPage'>上一页<b></b></a>" +
-                    item + "<a href='" + href + "currentPage=" + (currentPage + 1) + "' id='nextPage'>下一页<b></b></a>"
-                );
-            } else if (totalPage > 5) {
-                //总页数大于五页，则加载五页
-                if (currentPage < 5) {//当前页小于5，加载1-5页
-                    for (i; i <= 5; i++) {
-                        if (i === currentPage) {
-                            item += "<span class='current'>" + i + "</span>";
-                        } else {
-                            item += "<a href='" + href + "currentPage=" + i + "' >" + i + "</a>";
-                        }
-                    }
-                    ;
-                    if (currentPage <= totalPage - 2) {//最后一页追加“...”代表省略的页
-                        item += "<span> . . . </span>";
-                    }
-                    $('#pagin-btm').append(
-                        "<a href='" + href + "currentPage=" + (currentPage - 1) + "' id='lastPage' class='prev-disabled'>上一页<b></b></a>" +
-                        item + "<a href='" + href + "currentPage=" + (currentPage + 1) + "' id='nextPage'>下一页<b></b></a>"
-                    );
-                } else if (currentPage >= 5) {//当前页大于5页
-                    for (i; i <= 2; i++) {//1,2页码始终显示
-                        item += "<a href='" + href + "currentPage=" + i + "' >" + i + "</a>";
-                    }
-                    item += "<span> . . . </span>";//2页码后面用...代替部分未显示的页码
-                    if (currentPage + 1 === totalPage) {//当前页+1等于总页码
-                        for (i = currentPage - 1; i <= totalPage; i++) {//“...”后面跟三个页码当前页居中显示
-                            if (i === currentPage) {
-                                item += "<span class='current'>" + i + "</span>";
-                            } else {
-                                item += "<a href='" + href + "currentPage=" + i + "' >" + i + "</a>";
-                            }
-                        }
-                    } else if (currentPage === totalPage) {//当前页数等于总页数则是最后一页页码显示在最后
-                        for (i = currentPage - 2; i <= totalPage; i++) {//...后面跟三个页码当前页居中显示
-                            if (i === currentPage) {
-                                item += "<span class='current'>" + i + "</span>";
-                            } else {
-                                item += "<a href='" + href + "currentPage=" + i + "' >" + i + "</a>";
-                            }
-                        }
-                    } else {//当前页小于总页数，则最后一页后面跟...
-                        for (i = currentPage - 1; i <= currentPage + 1; i++) {//dqPage+1页后面...
-                            if (i === currentPage) {
-                                item += "<span class='current'>" + i + "</span>";
-                            } else {
-                                item += "<a href='" + href + "currentPage=" + i + "' >" + i + "</a>";
-                            }
-                        }
-                        item += "<span> . . . </span>";
-                    }
-                    $('#pagin-btm').append(
-                        "<a href='" + href + "currentPage=" + (currentPage - 1) + "' id='lastPage'>上一页<b></b></a>" +
-                        item + "<a href='" + href + "currentPage=" + (currentPage + 1) + "' id='nextPage'>下一页<b></b></a>"
-                    );
-                }
-            }
-        });
-    })
+}
+
+    });
 
     $.extend({
         Request: function (m) {

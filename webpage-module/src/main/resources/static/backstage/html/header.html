@@ -34,7 +34,7 @@
         <!--search end-->
         <div id="my360buy-2013">
             <dl>
-                <dt class="ld"><s></s><a href="http://localhost:8084/user/showLogin"
+                <dt class="ld"><s></s><a href="http://172.16.16.55:8084/user/showLogin"
                                          clstag="homepage|keycount|home2012|04a">我的shop</a><b></b></dt>
                 <dd>
                     <div class="loading-style1"><b></b>加载中，请稍候...</div>
@@ -183,10 +183,12 @@
     })();
 
     function mySearch(a) {
+        var b = "http://172.16.16.55:10086/backstage/html/search.html?keywords=" + encodeURIComponent(document.getElementById(a).value);
+        return window.location.href = b;
 
         let currentPage;
         let keyWord = document.getElementById(a).value;
-        let url = "http://localhost:8785/search/show";
+        let url = "http://172.16.16.55:8785/search/show";
         let params = {
             q: keyWord,
             page: currentPage
@@ -198,7 +200,7 @@
             for (let i of resp.data) {
                 console.log(i.itemId);
             }
-            
+
         }
 
         var b = "http://localhost:10086/backstage/html/search.html?keywords=" + encodeURIComponent(keyWord);

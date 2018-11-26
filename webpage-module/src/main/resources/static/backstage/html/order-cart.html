@@ -56,7 +56,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:8775/order/submitOrder',
+                url: 'http://172.16.16.55:8775/order/submitOrder',
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify({
@@ -66,7 +66,7 @@
                     console.log(resp);
                     if (resp != null) {
                         alert("提交订单成功");
-                        location.href = 'http://localhost:10086/backstage/html/success.html?orderId=' + resp.orderId + '&payment=' + resp.payment
+                        location.href = 'http://172.16.16.55:10086/backstage/html/success.html?orderId=' + resp.orderId + '&payment=' + resp.payment
                     }
                 }
             })
@@ -79,7 +79,7 @@
     <script>
         $.ajax({
             type: 'get',
-            url: 'http://localhost:8795/cart/findGoods',
+            url: 'http://172.16.16.55:8795/cart/findGoods',
             dataType: 'json',
             success: function (resp) {
                 console.log(resp);

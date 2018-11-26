@@ -20,11 +20,8 @@ import java.util.Map;
 @RequestMapping("/order")
 public class OrderController {
 
-
     @Resource
     private OrderService orderService;
-
-
 
 
     /**
