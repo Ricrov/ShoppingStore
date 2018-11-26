@@ -183,12 +183,12 @@
     })();
 
     function mySearch(a) {
-        var b = "http://172.16.16.55:10086/backstage/html/search.html?keywords=" + encodeURIComponent(document.getElementById(a).value);
+        var b = "http://localhost:10086/backstage/html/search.html?keywords=" + encodeURIComponent(document.getElementById(a).value);
         return window.location.href = b;
 
         let currentPage;
         let keyWord = document.getElementById(a).value;
-        let url = "http://172.16.16.55:8785/search/show";
+        let url = "http://localhost/search/show";
         let params = {
             q: keyWord,
             page: currentPage

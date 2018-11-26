@@ -51,11 +51,11 @@
         console.log(keywords);
         var currentPage = $.Request("currentPage");
         console.log(currentPage);
-        var url = "http://172.16.16.55:8785/searchGoods/findAll";
+        var url = "http://172.16.16.55:8785/search/show";
         if (!(keywords === "" || keywords === null)) {
-            url = "http://172.16.16.55:8785/searchGoods/findByTitle?title=" + keywords;
+            url = "http://localhost:8785/search/show?title=" + keywords;
         } else {
-            url = "http://172.16.16.55:8785/searchGoods/findAll";
+            url = "http://localhost:8785/search/show";
         }
 
         $.ajax({
