@@ -183,8 +183,26 @@
     })();
 
     function mySearch(a) {
-        var b = "http://localhost:10086/backstage/html/search.html?keywords=" + encodeURIComponent(document.getElementById(a).value);
-        return window.location.href = b;
+
+        let currentPage;
+        let keyWord = document.getElementById(a).value;
+        let url = "http://localhost:8785/search/show";
+        let params = {
+            q: keyWord,
+            page: currentPage
+        }
+        $.get(url, params, RemoteSearch);
+
+        function RemoteSearch(resp) {
+            console.log(resp);
+            for (let i of resp.data) {
+                console.log(i.itemId);
+            }
+            
+        }
+
+        var b = "http://localhost:10086/backstage/html/search.html?keywords=" + encodeURIComponent(keyWord);
+        // return window.location.href = b;
     }
 </script>
 </body>

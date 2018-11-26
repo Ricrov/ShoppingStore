@@ -52,6 +52,7 @@ subprojects {
         implementation('org.springframework.boot:spring-boot-starter-data-jpa')
         implementation('org.springframework.boot:spring-boot-starter-data-rest')
         implementation('org.springframework.boot:spring-boot-starter-jdbc')
+        implementation('org.springframework.boot:spring-boot-starter-data-solr')
         // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-feign
         compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-feign', version: '1.4.6.RELEASE'
         //https://mvnrepository.com/artifact/com.auth0/java-jwt

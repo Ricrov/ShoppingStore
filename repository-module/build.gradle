@@ -1,4 +1,5 @@
 dependencies {
+    compile project(":repository-module")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation('org.springframework.cloud:spring-cloud-starter-config')
     implementation('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
