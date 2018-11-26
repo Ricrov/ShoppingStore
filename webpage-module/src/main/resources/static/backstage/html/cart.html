@@ -160,7 +160,7 @@
 
         $.ajax({
             type: 'post',
-            url: 'http://localhost:8795/cart/itemListRedis',
+            url: 'http://172.16.16.55:8795/cart/itemListRedis',
             dataType: 'json',
             contentType: 'application/json',
             data: JSON.stringify({
@@ -170,7 +170,7 @@
 
         $.ajax({
             type: 'post',
-            url: 'http://localhost:8795/cart/updateNumberList',
+            url: 'http://172.16.16.55:8795/cart/updateNumberList',
             dataType: 'json',
             contentType: 'application/json',
             data: JSON.stringify({
@@ -182,7 +182,7 @@
                     var money = 0;
                     var money1 = $('#totalSkuPrice2').val();
                     money = money1 * 1;
-                    location.href = 'http://localhost:10086/backstage/html/order-cart.html'
+                    location.href = 'http://172.16.16.55:10086/backstage/html/order-cart.html'
                 }
             }
         });
@@ -199,7 +199,7 @@
 
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:8795/cart/deleteItems',
+            url: 'http://172.16.16.55:8795/cart/deleteItems',
             dataType: 'json',
             contentType: 'application/json',
             data: JSON.stringify({
@@ -243,7 +243,7 @@
 
         $.ajax({
             type: "POST",
-            url: "http://localhost:8795/cart/list",
+            url: "http://172.16.16.55:8795/cart/list",
             dataType: 'json',
             contentType: 'application/json',
             data: JSON.stringify({
@@ -613,7 +613,7 @@
 
         $.ajax({
             type: "POST",
-            url: "http://localhost:8795/cart/deleteGoods/" + itemId,
+            url: "http://172.16.16.55:8795/cart/deleteGoods/" + itemId,
             dataType: "json",
             contentType: "application/json",
             success: function (resp) {

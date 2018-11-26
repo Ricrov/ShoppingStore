@@ -20,7 +20,7 @@
 
         $.ajax({
             type: 'get',
-            url: 'http://localhost:8775/order/findAll',
+            url: 'http://172.16.16.55:8775/order/findAll',
             dataType: 'json',
             success: result
 
@@ -31,7 +31,7 @@
         var orderId = $(s).attr('orderId');
         $.ajax({
             type: 'post',
-            url: 'http://localhost:8775/order/deleteById',
+            url: 'http://172.16.16.55:8775/order/deleteById',
             dataType: 'json',
             contentType: 'application/json',
             data: JSON.stringify({
@@ -49,7 +49,7 @@
         console.log(orderId);
         $.ajax({
             type: 'post',
-            url: 'http://localhost:8775/order/getOrderId',
+            url: 'http://172.16.16.55:8775/order/getOrderId',
             dataType: 'json',
             contentType: 'application/json',
             data: JSON.stringify({

@@ -40,7 +40,7 @@
         console.log(itemId);
         $.ajax({
             type: "POST",
-            url: "http://localhost:8795/cart/goodsMessage",
+            url: "http://172.16.16.55:8795/cart/goodsMessage",
             dataType: 'json',
             contentType: 'application/json',
             data: JSON.stringify({
@@ -68,7 +68,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:8795/cart/addGoods',
+                url: 'http://172.16.16.55:8795/cart/addGoods',
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify({
@@ -79,7 +79,7 @@
                 success: function (resp) {
                     if (resp.status === 200) {
                         alert(resp.message);
-                        location.href = 'http://localhost:10086/backstage/html/cart.html#'
+                        location.href = 'http://172.16.16.55:10086/backstage/html/cart.html#'
                     }
                 }
             })
